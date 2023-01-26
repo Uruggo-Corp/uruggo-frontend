@@ -1,0 +1,13 @@
+:root {
+	--color-primary: #06111f;
+	--color-secondary: #9ba809;
+	--color-light: #c4dcfa;
+}
+
+html {
+	scroll-behavior: smooth;
+}
+
+* {
+	box-sizing: border-box;
+}
