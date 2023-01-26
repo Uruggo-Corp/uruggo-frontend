@@ -28,7 +28,7 @@
 		</div>
 	</div>
 	<div class="flex items-center item-2 justify-center">
-		<img src="/images/hero.png" class="w-[80%]" alt="Group of house pictures" />
+		<img src="/images/hero.png" class="md:w-[80%]" alt="Group of house pictures" />
 	</div>
 </section>
 
