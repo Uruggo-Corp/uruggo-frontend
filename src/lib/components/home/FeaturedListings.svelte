@@ -73,7 +73,7 @@
 			{#each numbers as number}
 				<div class="grid grid-cols-2 border md:p-5 p-3 md:gap-5 gap-3 items-center border-primary ">
 					<div class="w-full h-full">
-						<img class="h-full object-cover" src="/images/house.png" alt="House " />
+						<img class="h-full " src="/images/house.png" alt="House " />
 					</div>
 					<div class="space-y-1">
 						<h3 class="md:text-2xl text-lg">Furnished 2 bedroom flat</h3>
