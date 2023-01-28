@@ -13,5 +13,22 @@ module.exports = {
 			}
 		}
 	},
-	plugins: []
+	plugins: [require('daisyui')],
+	daisyui: {
+		themes: [
+			{
+				uruggoTheme: {
+					primary: '#06111F',
+					secondary: '#9BA809',
+					accent: '#37CDBE',
+					neutral: '#06111F',
+					'base-100': '#FFFFFF',
+					info: '#3ABFF8',
+					success: '#36D399',
+					warning: '#FBBD23',
+					error: '#dc2626'
+				}
+			}
+		]
+	}
 };

@@ -6,7 +6,7 @@
 		<h2 class="title font-primary md:text-5xl text-2xl font-bold">
 			Lets help you find your next apartment or your next roommate
 		</h2>
-		<p class="lg:text-lg md:mt-10 mt-5 text-justify md:text-left">
+		<p class="lg:text-lg mt-5 text-justify md:text-left caption">
 			Finding a new apartment can be a daunting task, but with Uruggo, we've made the process much
 			simpler. You can easily search for apartments in any location, find a compatible roommate, and
 			even list properties for sale, rent, or lease.
