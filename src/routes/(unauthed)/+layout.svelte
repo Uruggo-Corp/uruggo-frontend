@@ -1,6 +1,6 @@
 <script lang="ts">
-	import '../styles/tailwind.css';
-	import '../styles/app.css';
+	import '../../styles/tailwind.css';
+	import '../../styles/app.css';
 	import 'iconify-icon';
 
 	import Navbar from '$lib/components/shared/Navbar.svelte';

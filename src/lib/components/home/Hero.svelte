@@ -14,12 +14,12 @@
 		<div class="buttons  space-x-5 font-primary text-lg relative">
 			<a
 				href="/register"
-				class="inline-block mt-5 bg-secondary hover:scale-110 transition-all md:px-6 md:py-4 px-3 py-2 w-[46%] text-center  text-primary"
+				class="inline-block mt-5 bg-secondary my-btn transition-all md:px-6 md:py-4 px-3 py-2 w-[46%] text-center  text-primary"
 				>Sign me up!</a
 			>
 			<a
 				href="#featured"
-				class="inline-block mt-5 hover:scale-110 transition-all border border-secondary w-[46%] text-center text-secondary md:px-6 md:py-4 px-3 py-2"
+				class="inline-block mt-5 my-btn transition-all border border-secondary w-[46%] text-center text-secondary md:px-6 md:py-4 px-3 py-2"
 				>Look around<img src="/images/hero-arrow.png" alt="Arrow pointing down" /></a
 			>
 			<!-- <div class="flex justify-end relative h-10"> -->
@@ -45,6 +45,10 @@
 		position: absolute;
 		height: 100px;
 		right: -90px;
+	}
+
+	.my-btn:hover {
+		transform: scale(0.9);
 	}
 
 	@media only screen and (max-width: 768px) {

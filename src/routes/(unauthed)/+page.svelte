@@ -2,6 +2,7 @@
 	import Hero from '$lib/components/home/Hero.svelte';
 	import FeaturedListings from '$lib/components/home/FeaturedListings.svelte';
 	import Testimonials from '$lib/components/home/Testimonials.svelte';
+	import Subscription from '$lib/components/home/Subscription.svelte';
 </script>
 
 <svelte:head>
@@ -11,3 +12,4 @@
 <Hero />
 <FeaturedListings />
 <Testimonials />
+<Subscription />
