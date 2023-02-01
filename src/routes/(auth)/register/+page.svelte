@@ -1,190 +1,294 @@
-<!-- We then show them a form based on that -->
 <script lang="ts">
+	import Business from './Business.svelte';
+	import Call from './Call.svelte';
+	import Eye from './Eye.svelte';
+	import EyeSlash from './EyeSlash.svelte';
+	import Home from './Home.svelte';
+	import Lock from './Lock.svelte';
+	import Sms from './Sms.svelte';
+	import UserSquare from './UserSquare.svelte';
+	import UserSquareGreen from './UserSquareGreen.svelte';
+
+	import { regStep1Schema, regStep2AgentSchema, regStep2UsersSchema } from './schema';
+	import { z } from 'zod';
+
 	// Keep track of the current step
-	let step = 1;
+	let step = 1; //TODO: uncomment this
+	// let step = 3; // TODO: remove this
 
 	// Keep track of the user type
-	let userType = '';
+	let userType = ''; // TODO: uncomment this
+	// let userType = 'agent'; //TODO: remove this
+
+	let passwordVisible = false;
+	const togglePasswordVisibility = () => (passwordVisible = !passwordVisible);
+
+	let errors: any = {};
+	let data: any = {};
+
+	const nextStep = () => {
+		errors = {};
+		if (step === 1) {
+			step = 2;
+		} else if (step === 2) {
+			try {
+				regStep1Schema.parse(data);
+				step = 3;
+			} catch (err) {
+				if (err instanceof z.ZodError) {
+					errors = err.flatten().fieldErrors;
+				}
+			}
+		} else if (step === 3) {
+			step = 4;
+		}
+	};
+
+	const register = async () => {
+		errors = {};
+		try {
+			regStep2UsersSchema.parse(data);
+			console.log('registering normal user');
+		} catch (err) {
+			if (err instanceof z.ZodError) {
+				errors = err.flatten().fieldErrors;
+			}
+		}
+	};
+
+	const registerAgent = async () => {
+		errors = {};
+		try {
+			regStep2AgentSchema.parse(data);
+			console.log('registering agent user');
+		} catch (err) {
+			if (err instanceof z.ZodError) {
+				errors = err.flatten().fieldErrors;
+			}
+		}
+	};
 </script>
 
 <!-- The registration has 3 steps -->
 <!-- We first ask what kind of user theyy want to register as. Agent/Landlord or Normal users-->
 
 <div class="w-full max-w-[450px] mx-auto px-5 space-y-5">
-	<div class="form-header">
-		<h2 class="text-3xl font-primary text-center md:text-left">Create an account</h2>
+	<div class="form-header flex flex-col">
+		<h2 class="text-3xl font-primary ">Create an account</h2>
 		<progress
 			class="progress progress-secondary w-56 transition-all"
-			value={step === 1 ? '25' : step === 2 ? '50' : '75'}
+			value={step === 1 ? '25' : step === 2 ? '50' : step === 3 ? '75' : '100'}
 			max="100"
 		/>
 	</div>
 	{#if step === 1}
-		<div class="space-y-5">
+		<div class="space-y-5 pt-10">
 			<div class="grid grid-cols-1 md:grid-cols-2 gap-10">
 				<button
-					on:click={() => (userType = 'agent')}
-					class="border p-3 bg-[#FCFCFC] "
-					class:border-secondary={userType == 'agent'}
-					class:text-secondary={userType == 'agent'}
-				>
-					<p class="text-center">I’m looking for an apartment /roomate</p>
-				</button>
-				<button
 					on:click={() => (userType = 'normal')}
-					class="border p-3 bg-[#FCFCFC] "
+					class="border py-10 px-3 bg-[#FCFCFC] max-w-[180px] mx-auto  hover:scale-90 transition-transform flex flex-col items-center justify-center space-y-5"
 					class:border-secondary={userType == 'normal'}
 					class:text-secondary={userType == 'normal'}
 				>
+					<UserSquareGreen />
+
+					<p class="text-center">I’m looking for an apartment /roomate</p>
+				</button>
+				<button
+					on:click={() => (userType = 'agent')}
+					class="border py-10 px-3 bg-[#FCFCFC] max-w-[180px] mx-auto hover:scale-90 transition-transform flex flex-col items-center justify-center space-y-5"
+					class:border-secondary={userType == 'agent'}
+					class:text-secondary={userType == 'agent'}
+				>
+					<UserSquareGreen />
 					<p class="text-center">I’m a property agent/Landlord</p>
 				</button>
 			</div>
-			<button class="btn btn-secondary" on:click={() => step++}>Next</button>
+			<button class="btn btn-secondary" disabled={userType.length < 1} on:click={nextStep}
+				>Next</button
+			>
 		</div>
 	{/if}
 
 	{#if step === 2}
-		{#if userType === 'normal'}
-			<form class="form">
+		<form class="form">
+			<div class="form-control">
+				<UserSquare />
+
+				<input
+					type="text"
+					bind:value={data.firstName}
+					placeholder="First Name"
+					class="form-input"
+				/>
+			</div>
+
+			{#if errors.firstName}
+				{#each errors.firstName as error}
+					<p class="text-red-500 text-xs mt-1">{error}</p>
+				{/each}
+			{/if}
+
+			<div class="form-control">
+				<UserSquare />
+
+				<input type="text" bind:value={data.lastName} placeholder="Last Name" class="form-input" />
+			</div>
+
+			{#if errors.lastName}
+				{#each errors.lastName as error}
+					<p class="text-red-500 text-xs mt-1">{error}</p>
+				{/each}
+			{/if}
+
+			<div class="form-control">
+				<Sms />
+				<input type="email" bind:value={data.email} placeholder="Email" class="form-input" />
+			</div>
+
+			{#if errors.email}
+				{#each errors.email as error}
+					<p class="text-red-500 text-xs mt-1">{error}</p>
+				{/each}
+			{/if}
+
+			<div class="form-control">
+				<Call />
+
+				<input
+					type="text"
+					bind:value={data.phoneNumber}
+					placeholder="Phone Number"
+					class="form-input"
+				/>
+			</div>
+
+			{#if errors.phoneNumber}
+				{#each errors.phoneNumber as error}
+					<p class="text-red-500 text-xs mt-1">{error}</p>
+				{/each}
+			{/if}
+
+			<button on:click={nextStep} type="button" class="btn btn-secondary">Next</button>
+		</form>
+	{/if}
+
+	{#if step === 3}
+		<form class="form">
+			<div class="form-control">
+				<Lock />
+				<input
+					type={!passwordVisible ? 'password' : 'text'}
+					placeholder="Password"
+					class="form-input"
+					value={data.password || ''}
+					on:input={(e) => (data.password = e.target?.value)}
+				/>
+				<button on:click={togglePasswordVisibility}>
+					{#if !passwordVisible}
+						<EyeSlash />
+					{:else}
+						<Eye />
+					{/if}
+				</button>
+			</div>
+
+			{#if errors.password}
+				{#each errors.password as error}
+					<p class="text-red-500 text-xs mt-1">{error}</p>
+				{/each}
+			{/if}
+
+			<div class="form-control">
+				<Lock />
+				<input
+					type={!passwordVisible ? 'password' : 'text'}
+					placeholder="Confirm password"
+					class="form-input"
+					on:input={(e) => (data.confirmPassword = e.target?.value)}
+					value={data.confirmPassword || ''}
+				/>
+				<button on:click={togglePasswordVisibility}>
+					{#if !passwordVisible}
+						<EyeSlash />
+					{:else}
+						<Eye />
+					{/if}
+				</button>
+			</div>
+
+			{#if errors.confirmPassword}
+				{#each errors.confirmPassword as error}
+					<p class="text-red-500 text-xs mt-1">{error}</p>
+				{/each}
+			{/if}
+			{#if userType === 'normal'}
+				<button on:click={register} type="button" class="btn btn-secondary">Create Account</button>
+			{:else if userType === 'agent'}
 				<div class="form-control">
-					<svg
-						width="24"
-						height="24"
-						viewBox="0 0 24 24"
-						fill="none"
-						xmlns="http://www.w3.org/2000/svg"
-					>
-						<path
-							d="M12 2C8.68629 2 6 4.68629 6 8C6 11.3137 8.68629 14 12 14C15.3137 14 18 11.3137 18 8C18 4.68629 15.3137 2 12 2Z"
-							stroke="#ADAAAA"
-							stroke-width="1.5"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-						/>
-						<path
-							d="M12 14C12.5304 14 13.0391 14.2107 13.4142 14.5858C13.7893 14. 9609 15.4696 15 16C15.5304 16.5304 15.7411 17.0391 15.5858 17.4142C15.4304 17.7893 15.0391 18 14.5 18H9.5C8.96086 18 8.56957 17.7893 8.41421 17.4142C8.25885 17.0391 8.46957 16.5304 9 16C9.53043 15.4696 10.0391 15.2589 10.4142 15.4142C10.7893 15.5696 11 15.9609 11 16.5V20"
-							stroke="#ADAAAA"
-							stroke-width="1.5"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-						/>
-					</svg>
-					<input type="text" placeholder="Full Name" />
-				</div>
-				<div class="form-control">
-					<svg
-						width="24"
-						height="24"
-						viewBox="0 0 24 24"
-						fill="none"
-						xmlns="http://www.w3.org/2000/svg"
-					>
-						<path
-							d="M12 2C8.68629 2 6 4.68629 6 8C6 11.3137 8.68629 14 12 14C15.3137 14 18 11.3137 18 8C18 4.68629 15.3137 2 12 2Z"
-							stroke="#ADAAAA"
-							stroke-width="1.5"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-						/>
-						<path
-							d="M12 14C12.5304 14 13.0391 14.2107 13.4142 14.5858C13.7893 14. 9609 15.4696 15 16C15.5304 16.5304 15.7411 17.0391 15.5858 17.4142C15.4304 17.7893 15.0391 18 14.5 18H9.5C8.96086 18 8.56957 17.7893 8.41421 17.4142C8.25885 17.0391 8.46957 16.5304 9 16C9.53043 15.4696 10.0391 15.2589 10.4142 15.4142C10.7893 15.5696 11 15.9609 11 16.5V20"
-							stroke="#ADAAAA"
-							stroke-width="1.5"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-						/>
-					</svg>
-					<input type="text" placeholder="Email" />
+					<Home />
+
+					<input type="text" bind:value={data.address} placeholder="Address" class="form-input" />
 				</div>
 
-				<div class="form-control">
-					<svg
-						width="24"
-						height="24"
-						viewBox="0 0 24 24"
-						fill="none"
-						xmlns="http://www.w3.org/2000/svg"
-					>
-						<path
-							d="M12 2C8.68629 2 6 4.68629 6 8C6 11.3137 8.68629 14 12 14C15.3137 14 18 11.3137 18 8C18 4.68629 15.3137 2 12 2Z"
-							stroke="#ADAAAA"
-							stroke-width="1.5"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-						/>
-						<path
-							d="M12 14C12.5304 14 13.0391 14.2107 13.4142 14.5858C13.7893 14. 9609 15.4696 15 16C15.5304 16.5304 15.7411 17.0391 15.5858 17.4142C15.4304 17.7893 15.0391 18 14.5 18H9.5C8.96086 18 8.56957 17.7893 8.41421 17.4142C8.25885 17.0391 8.46957 16.5304 9 16C9.53043 15.4696 10.0391 15.2589 10.4142 15.4142C10.7893 15.5696 11 15.9609 11 16.5V20"
-							stroke="#ADAAAA"
-							stroke-width="1.5"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-						/>
-					</svg>
-					<input type="text" placeholder="Phone Number" />
-				</div>
+				{#if errors.address}
+					{#each errors.address as error}
+						<p class="text-red-500 text-xs mt-1">{error}</p>
+					{/each}
+				{/if}
 
 				<div class="form-control">
-					<svg
-						width="24"
-						height="24"
-						viewBox="0 0 24 24"
-						fill="none"
-						xmlns="http://www.w3.org/2000/svg"
-					>
-						<path
-							d="M12 2C8.68629 2 6 4.68629 6 8C6 11.3137 8.68629 14 12 14C15.3137 14 18 11.3137 18 8C18 4.68629 15.3137 2 12 2Z"
-							stroke="#ADAAAA"
-							stroke-width="1.5"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-						/>
-						<path
-							d="M12 14C12.5304 14 13.0391 14.2107 13.4142 14.5858C13.7893 14. 9609 15.4696 15 16C15.5304 16.5304 15.7411 17.0391 15.5858 17.4142C15.4304 17.7893 15.0391 18 14.5 18H9.5C8.96086 18 8.56957 17.7893 8.41421 17.4142C8.25885 17.0391 8.46957 16.5304 9 16C9.53043 15.4696 10.0391 15.2589 10.4142 15.4142C10.7893 15.5696 11 15.9609 11 16.5V20"
-							stroke="#ADAAAA"
-							stroke-width="1.5"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-						/>
-					</svg>
-					<input type="text" placeholder="Password" />
+					<Business />
+
+					<input
+						type="text"
+						bind:value={data.businessName}
+						placeholder="Business name"
+						class="form-input"
+					/>
 				</div>
 
-				<div class="form-control">
-					<svg
-						width="24"
-						height="24"
-						viewBox="0 0 24 24"
-						fill="none"
-						xmlns="http://www.w3.org/2000/svg"
-					>
-						<path
-							d="M12 2C8.68629 2 6 4.68629 6 8C6 11.3137 8.68629 14 12 14C15.3137 14 18 11.3137 18 8C18 4.68629 15.3137 2 12 2Z"
-							stroke="#ADAAAA"
-							stroke-width="1.5"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-						/>
-						<path
-							d="M12 14C12.5304 14 13.0391 14.2107 13.4142 14.5858C13.7893 14. 9609 15.4696 15 16C15.5304 16.5304 15.7411 17.0391 15.5858 17.4142C15.4304 17.7893 15.0391 18 14.5 18H9.5C8.96086 18 8.56957 17.7893 8.41421 17.4142C8.25885 17.0391 8.46957 16.5304 9 16C9.53043 15.4696 10.0391 15.2589 10.4142 15.4142C10.7893 15.5696 11 15.9609 11 16.5V20"
-							stroke="#ADAAAA"
-							stroke-width="1.5"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-						/>
-					</svg>
-					<input type="text" placeholder="Confirm Password" />
-				</div>
-
-				<button type="submit">Sign Up</button>
-			</form>
-		{/if}
+				{#if errors.businessName}
+					{#each errors.businessName as error}
+						<p class="text-red-500 text-xs mt-1">{error}</p>
+					{/each}
+				{/if}
+				<button on:click={registerAgent} type="button" class="btn btn-secondary"
+					>Create Account</button
+				>
+			{/if}
+		</form>
 	{/if}
 	<div class="form-link-bottom">
-		Already have an account? <a href="/login" class="text-primary">Login</a>
+		Have an account? <a href="/login" class="text-primary">Login</a>
 	</div>
 </div>
 
 <style>
+	.form-control {
+		border: 1px solid #b4b4b0;
+		display: flex;
+		align-items: center;
+		flex-direction: row;
+		width: 100%;
+		margin-top: 1rem;
+	}
+
+	.form-input {
+		width: 100%;
+		border: none;
+		height: 100%;
+		padding: 1rem;
+	}
+
+	.form-input::placeholder {
+		color: #b4b4b0;
+	}
+
+	.form-input:focus {
+		outline: none;
+	}
+
 	.btn {
 		margin-top: 1rem;
 		width: 100%;
@@ -194,8 +298,16 @@
 		color: var(--color-primary);
 	}
 
+	.btn:disabled {
+		background-color: #b4b4b0;
+	}
+
 	.btn-secondary {
 		background-color: var(--color-secondary);
+	}
+
+	.btn:hover {
+		transform: scale(0.9);
 	}
 
 	.form-link-bottom {
