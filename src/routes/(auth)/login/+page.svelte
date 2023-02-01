@@ -86,7 +86,6 @@
 		align-items: center;
 		flex-direction: row;
 		width: 100%;
-		max-width: 400px;
 		margin-top: 1rem;
 	}
 
@@ -123,6 +122,10 @@
 		text-transform: capitalize;
 		font-size: 1rem;
 		color: var(--color-primary);
+	}
+
+	.btn:hover {
+		transform: scale(0.9);
 	}
 
 	.btn-secondary {
