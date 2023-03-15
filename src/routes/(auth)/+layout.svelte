@@ -2,7 +2,11 @@
 	import '../../styles/tailwind.css';
 	import '../../styles/app.css';
 	import 'iconify-icon';
+
+	import { Toaster } from 'svelte-french-toast';
 </script>
+
+<Toaster />
 
 <!-- On desktop it is a screen with a fixed full height image at the left and the slot content on the left -->
 <!-- On mobile it is just the slot content -->

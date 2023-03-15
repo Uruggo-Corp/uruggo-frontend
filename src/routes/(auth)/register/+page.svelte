@@ -11,14 +11,19 @@
 
 	import { regStep1Schema, regStep2AgentSchema, regStep2UsersSchema } from './schema';
 	import { z } from 'zod';
+	import { createUser, uploadImage } from './logic';
+	import { AxiosError } from 'axios';
+	import toast from 'svelte-french-toast';
 
 	// Keep track of the current step
-	let step = 1; //TODO: uncomment this
-	// let step = 3; // TODO: remove this
+	// let step = 1; //TODO: uncomment this
+	let step = 3; // TODO: remove this
 
 	// Keep track of the user type
-	let userType = ''; // TODO: uncomment this
-	// let userType = 'agent'; //TODO: remove this
+	// let userType = ''; // TODO: uncomment this
+	let userType = 'agent'; //TODO: remove this
+
+	let loading = false;
 
 	let passwordVisible = false;
 	const togglePasswordVisibility = () => (passwordVisible = !passwordVisible);
@@ -45,36 +50,73 @@
 	};
 
 	const register = async () => {
+		loading = true;
 		errors = {};
 		try {
 			regStep2UsersSchema.parse(data);
-			console.log('registering normal user');
+			await createUser(data);
+			nextStep();
 		} catch (err) {
 			if (err instanceof z.ZodError) {
 				errors = err.flatten().fieldErrors;
 			}
+			if (err instanceof AxiosError) {
+				toast.error(
+					err.response?.data.message || 'Ooops something went wrong, please try again later!',
+					{
+						position: 'bottom-right'
+					}
+				);
+			}
+		} finally {
+			loading = false;
 		}
 	};
 
 	const registerAgent = async () => {
+		loading = true;
 		errors = {};
 		try {
 			regStep2AgentSchema.parse(data);
 			console.log('registering agent user');
+			// nextStep(); TODO: uncomment this
 		} catch (err) {
 			if (err instanceof z.ZodError) {
 				errors = err.flatten().fieldErrors;
 			}
+		} finally {
+			loading = false;
 		}
+	};
+
+	const upload = async (path: 'idFront' | 'idBack') => {
+		const input = document.createElement('input');
+		input.type = 'file';
+		input.accept = 'image/*';
+		input.onchange = async (e) => {
+			if (e.target instanceof HTMLInputElement && e.target.files?.length) {
+				const file = e.target.files[0];
+				const blob = new Blob([file], { type: file.type });
+				const url = await uploadImage(blob, file.name);
+				data[path] = {
+					name: file.name,
+					url
+				};
+			}
+		};
+		input.click();
 	};
 </script>
 
-<!-- The registration has 3 steps -->
-<!-- We first ask what kind of user theyy want to register as. Agent/Landlord or Normal users-->
+<svelte:head>
+	<title>Register - Uruggo</title>
+</svelte:head>
 
 <div class="w-full max-w-[450px] mx-auto px-5 space-y-5">
 	<div class="form-header flex flex-col">
-		<h2 class="text-3xl font-primary ">Create an account</h2>
+		<h2 class="text-3xl font-primary ">
+			{#if step === 4}Confirmation code{:else}Create an account{/if}
+		</h2>
 		<progress
 			class="progress progress-secondary w-56 transition-all"
 			value={step === 1 ? '25' : step === 2 ? '50' : step === 3 ? '75' : '100'}
@@ -223,7 +265,11 @@
 				{/each}
 			{/if}
 			{#if userType === 'normal'}
-				<button on:click={register} type="button" class="btn btn-secondary">Create Account</button>
+				<button on:click={register} type="button" class="btn btn-secondary">
+					{#if loading}<iconify-icon icon="eos-icons:bubble-loading" width="24" />
+					{:else}
+						Create Account{/if}
+				</button>
 			{:else if userType === 'agent'}
 				<div class="form-control">
 					<Home />
@@ -253,12 +299,44 @@
 						<p class="text-red-500 text-xs mt-1">{error}</p>
 					{/each}
 				{/if}
-				<button on:click={registerAgent} type="button" class="btn btn-secondary"
-					>Create Account</button
-				>
+
+				<div class="w-full text-sm bg-[#FCFCFC] p-5 text-[#B4B4B0] mt-[1rem]">
+					<p>Kindly upload needed document, so your identity can be verified.</p>
+
+					<div class="flex mt-3 justify-between ">
+						<div class="flex items-center">
+							<p>ID card front</p>
+							<button class="file-button line-clamp-1 ma" on:click={() => upload('idFront')}>
+								{#if data.idFront}
+									{data.idFront.name}
+								{:else}
+									Upload
+								{/if}
+							</button>
+						</div>
+						<div class="flex items-center">
+							<p>ID card back</p>
+							<button class="file-button line-clamp-1 ma" on:click={() => upload('idBack')}>
+								{#if data.idBack}
+									{data.idBack.name.length < 10
+										? data.idBack.name
+										: `${data.idBack.name.substr(0, 10)}...`}
+								{:else}
+									Upload
+								{/if}
+							</button>
+						</div>
+					</div>
+				</div>
+
+				<button on:click={registerAgent} type="button" class="btn btn-secondary">
+					{#if loading}<iconify-icon icon="eos-icons:bubble-loading" width="24" />
+					{:else}Create Account{/if}
+				</button>
 			{/if}
 		</form>
 	{/if}
+
 	<div class="form-link-bottom">
 		Have an account? <a href="/login" class="text-primary">Login</a>
 	</div>
@@ -272,6 +350,7 @@
 		flex-direction: row;
 		width: 100%;
 		margin-top: 1rem;
+		background-color: #fcfcfc;
 	}
 
 	.form-input {
@@ -317,5 +396,11 @@
 
 	.form-link-bottom a {
 		color: var(--color-secondary);
+	}
+
+	.file-button {
+		margin: 0 0.5rem;
+		border: 1px solid #b4b4b0;
+		padding: 0.5rem;
 	}
 </style>
