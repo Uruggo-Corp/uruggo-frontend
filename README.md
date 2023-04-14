@@ -22,3 +22,13 @@
 - Build: `pnpm run build`
 
 - Preview build: `pnpm run preview`
+
+## Contributing
+
+- Fork the repo
+
+- Create a new branch
+
+- Make your changes
+
+- Create a pull request
