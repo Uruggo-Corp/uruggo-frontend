@@ -8,5 +8,7 @@
 		justify-content: center;
 		font-size: 3.35rem;
 		font-weight: 400;
+		background-color: #fcfcfc;
+		padding: 0 0 0 3rem;
 	}
 </style>
