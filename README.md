@@ -1,38 +1,24 @@
-# create-svelte
+# Uruggo Frontend
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+- Design link: https://www.figma.com/file/dydTnYaXLdbSgqmqVI5bmj/uruggo?node-id=0-1&t=cm7U8wgt5uPobmaO-0
 
-## Creating a project
+- Backend api link:
+  https://api.uruggo.com
 
-If you're seeing this, you've probably already done this step. Congrats!
+- Backend api documentation: https://api.uruggo.com/docs
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+- Frontend link: https://uruggo.com
 
-# create a new project in my-app
-npm create svelte@latest my-app
-```
+## How to run
 
-## Developing
+- Install dependencies: `pnpm install`
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+- Run dev server: `pnpm run dev`
 
-```bash
-npm run dev
+- Visit `localhost:5173` in your browser
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
+## How to build
 
-## Building
+- Build: `pnpm run build`
 
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+- Preview build: `pnpm run preview`
