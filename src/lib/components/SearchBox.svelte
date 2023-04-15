@@ -3,7 +3,7 @@
 		<div class="search-icon">
 			<img src="/icons/search.svg" alt="search icon" />
 		</div>
-		<input placeholder="Search for an apartment" />
+		<input placeholder="Search for an apartment" class="search-box-input" />
 	</div>
 </div>
 
@@ -14,7 +14,7 @@
 		justify-content: center;
 		height: 2rem;
 		width: 100vw;
-		margin-top: 3rem;
+		margin: 3rem 0;
 		.search-box {
 			display: flex;
 			align-items: center;
@@ -25,6 +25,11 @@
 			font-weight: 400;
 			outline: none;
 			color: #b4b4b0;
+			.search-box-input {
+				flex: 1;
+				border: none;
+				outline: none;
+			}
 		}
 		.search-icon {
 			margin-right: 1rem;
