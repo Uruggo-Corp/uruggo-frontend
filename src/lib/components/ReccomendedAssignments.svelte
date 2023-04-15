@@ -123,7 +123,6 @@
 	.container {
 		display: grid;
 		grid-template-columns: 1fr 1fr 1fr;
-		grid-template-rows: 1fr 1fr 1fr;
 		gap: 18px 10px;
 		grid-auto-flow: row;
 		grid-template-areas:
