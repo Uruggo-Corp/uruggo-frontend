@@ -1,0 +1,217 @@
+<script lang="ts">
+	import { onMount } from 'svelte';
+
+	let apartments: Array<any>;
+	apartments = [];
+	const fetchApartments = () => {
+		fetch('https://api.uruggo.com/listings?search&page=1&limit=10')
+			.then((res) => {
+				if (!res.ok) {
+					throw new Error('Failed to fetch apartments data');
+				}
+				return res.json();
+			})
+			.then((data) => {
+				// Update apartments store with fetched data
+				apartments = data.data;
+			})
+			.catch((error) => {
+				console.error(error);
+				// Handle error, e.g., set apartments store to empty array or show error message
+			});
+	};
+
+	onMount(() => {
+		fetchApartments();
+	});
+</script>
+
+<div class="filters">
+	<div class="filter-item active">All</div>
+	<div class="filter-item">Self-con</div>
+	<div class="filter-item">One bedroom</div>
+	<div class="filter-item">Two bedroom</div>
+	<div class="filter-item">Three bedroom</div>
+	<div class="filter-item">Four Bedroom</div>
+	<div class="filter-item">Shared Apartment</div>
+</div>
+
+<div class="apartments">
+	<h2>Available Apartments</h2>
+	<!-- Render apartments data in your component -->
+	{#if apartments.length}
+		<div class="container">
+			{#each apartments as apartment}
+				<div class="apartment-block">
+					<img class="apartment-image" src="https://placehold.co/600x400" alt="apartment" />
+					<div class="apartment-description">
+						<div class="apartment-title">{apartment.title}</div>
+						<div class="apartment-location">
+							<img src="/icons/location-icon.svg" alt="" />
+							<div>
+								{apartment.location.city + ', ' + apartment.location.state}
+							</div>
+						</div>
+						<div class="apartment-price">
+							{apartment.price.toLocaleString('en-US', {})}/yr
+						</div>
+						<div class="apartment-view-button">
+							<button>View</button>
+						</div>
+					</div>
+				</div>
+			{/each}
+		</div>
+	{:else}
+		<div class="loading">
+			<span class="loader" />
+		</div>
+	{/if}
+</div>
+
+<style lang="scss">
+	.filters {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 2rem;
+		width: 100vw;
+		margin: 3rem 0;
+		font-size: 1.125rem;
+		.filter-item {
+			cursor: pointer;
+			color: #666565;
+			&:hover {
+				color: #000;
+			}
+		}
+		.active {
+			color: #9ba809;
+			&:hover {
+				color: #c2d30c;
+			}
+		}
+		div {
+			margin-right: 1rem;
+		}
+	}
+	.apartments {
+		h2 {
+			text-align: center;
+			font-weight: 700;
+			font-size: 1.875rem;
+			color: #06111f;
+			padding: 1.5rem 0;
+		}
+		.apartment-block {
+			height: 20.75rem;
+			width: 100%;
+			display: flex;
+			flex-direction: column;
+			margin: 0 auto;
+			border: 0.5px solid #06111f;
+			border-radius: 4px;
+			.apartment-description {
+				padding: 16px;
+
+				.apartment-title {
+					font-size: 1.25rem;
+					font-weight: 400;
+					line-height: 1.625rem;
+				}
+				.apartment-location {
+					display: flex;
+					gap: 6px;
+				}
+				.apartment-price {
+					font-size: 1.25rem;
+					font-weight: 700;
+					line-height: 1.625rem;
+					color: #06111f;
+					padding: 16px 0;
+				}
+				.apartment-view-button {
+					position: relative;
+					button {
+						position: absolute;
+						bottom: 0;
+						right: 0;
+						padding: 0.25rem 2rem;
+						font-size: 1.5rem;
+						font-weight: 400;
+						border: 1px solid #06111f;
+						background-color: #fff;
+						&:hover {
+							background-color: #cfcfcf;
+							cursor: pointer;
+						}
+					}
+				}
+			}
+			.apartment-image {
+				height: 60%;
+				width: 100%;
+				object-fit: cover;
+			}
+		}
+	}
+	.container {
+		display: grid;
+		grid-template-columns: 1fr 1fr 1fr;
+		grid-template-rows: 1fr 1fr 1fr;
+		gap: 18px 10px;
+		grid-auto-flow: row;
+		grid-template-areas:
+			'. . .'
+			'. . .'
+			'. . .';
+		padding: 0 4rem;
+	}
+	.loading {
+		height: 100vh;
+		width: 100vw;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	.loader {
+		width: 48px;
+		height: 48px;
+		border-radius: 50%;
+		position: relative;
+		animation: rotate 1s linear infinite;
+	}
+	.loader::before {
+		content: '';
+		box-sizing: border-box;
+		position: absolute;
+		inset: 0px;
+		border-radius: 50%;
+		border: 5px solid #9ba809;
+		animation: prixClipFix 2s linear infinite;
+	}
+
+	@keyframes rotate {
+		100% {
+			transform: rotate(360deg);
+		}
+	}
+
+	@keyframes prixClipFix {
+		0% {
+			clip-path: polygon(50% 50%, 0 0, 0 0, 0 0, 0 0, 0 0);
+		}
+		25% {
+			clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 0, 100% 0, 100% 0);
+		}
+		50% {
+			clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 100% 100%, 100% 100%);
+		}
+		75% {
+			clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 0 100%, 0 100%);
+		}
+		100% {
+			clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 0 100%, 0 0);
+		}
+	}
+</style>
