@@ -122,15 +122,16 @@
 	}
 	.container {
 		display: grid;
-		grid-template-columns: 1fr 1fr 1fr;
-		gap: 18px 10px;
-		grid-auto-flow: row;
-		grid-template-areas:
-			'. . .'
-			'. . .'
-			'. . .';
-		padding: 0 4rem;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 8px;
+		padding: 0 3.8125rem;
+		@media (max-width: 767px) {
+			// Styles for mobile screens
+			grid-template-columns: 1fr;
+			gap: 1.25rem;
+		}
 	}
+
 	.loading {
 		height: 100vh;
 		width: 100vw;

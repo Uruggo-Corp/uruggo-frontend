@@ -42,8 +42,13 @@
 		color: #fff;
 		padding: 1rem;
 		text-align: center;
-		width: 100vw;
 		padding: 3rem 2rem;
+
+		@media (max-width: 766px) {
+			overflow-x: scroll;
+			font-size: 0.875rem;
+			white-space: nowrap;
+		}
 		.footer-items {
 			width: 100%;
 			display: flex;
