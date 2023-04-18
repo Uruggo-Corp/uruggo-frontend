@@ -26,14 +26,16 @@
 	});
 </script>
 
-<div class="filters">
-	<div class="filter-item active">All</div>
-	<div class="filter-item">Self-con</div>
-	<div class="filter-item">One bedroom</div>
-	<div class="filter-item">Two bedroom</div>
-	<div class="filter-item">Three bedroom</div>
-	<div class="filter-item">Four Bedroom</div>
-	<div class="filter-item">Shared Apartment</div>
+<div class="filter-container">
+	<div class="filters">
+		<div class="filter-item active">All</div>
+		<div class="filter-item">Self-con</div>
+		<div class="filter-item">One bedroom</div>
+		<div class="filter-item">Two bedroom</div>
+		<div class="filter-item">Three bedroom</div>
+		<div class="filter-item">Four Bedroom</div>
+		<div class="filter-item">Shared Apartment</div>
+	</div>
 </div>
 
 <div class="apartments">
@@ -70,23 +72,47 @@
 </div>
 
 <style lang="scss">
+	.filter-container {
+		@media (max-width: 767px) {
+			width: 100vw;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+	}
 	.filters {
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		height: 2rem;
 		width: 100vw;
-		margin: 3rem 0;
 		font-size: 1.125rem;
+
+		@media (max-width: 767px) {
+			width: 90%;
+			display: -webkit-box;
+			overflow-x: scroll;
+			white-space: nowrap;
+		}
 		.filter-item {
 			cursor: pointer;
 			color: #666565;
+			@media (max-width: 767px) {
+				padding: 0 1rem;
+				display: flex;
+				align-items: center;
+			}
 			&:hover {
 				color: #000;
 			}
 		}
 		.active {
 			color: #9ba809;
+			@media (max-width: 767px) {
+				color: #fff;
+				background-color: #9ba809;
+				border-radius: 15px;
+			}
 			&:hover {
 				color: #c2d30c;
 			}
@@ -111,6 +137,17 @@
 			margin: 0 auto;
 			border: 0.5px solid #06111f;
 			border-radius: 4px;
+			@media (max-width: 767px) {
+				flex-direction: row;
+				.apartment-image {
+					height: 100% !important;
+					width: 50% !important;
+				}
+				.apartment-description {
+					width: 50% !important;
+					padding: 0.5rem !important;
+				}
+			}
 			.apartment-description {
 				padding: 16px;
 
@@ -159,7 +196,7 @@
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
 		gap: 8px;
-		padding: 0 3.8125rem;
+		padding: 0 1.25rem;
 		// Mobile
 		@media (max-width: 767px) {
 			// Styles for mobile screens
