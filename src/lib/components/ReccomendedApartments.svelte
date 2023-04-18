@@ -45,9 +45,6 @@
 						<div class="apartment-price">
 							{apartment.price.toLocaleString('en-US', {})}/yr
 						</div>
-						<div class="apartment-view-button">
-							<button>View</button>
-						</div>
 					</div>
 				</div>
 			{/each}
@@ -95,23 +92,6 @@
 					color: #06111f;
 					padding: 16px 0;
 				}
-				.apartment-view-button {
-					position: relative;
-					button {
-						position: absolute;
-						bottom: 0;
-						right: 0;
-						padding: 0.25rem 2rem;
-						font-size: 1.5rem;
-						font-weight: 400;
-						border: 1px solid #06111f;
-						background-color: #fff;
-						&:hover {
-							background-color: #cfcfcf;
-							cursor: pointer;
-						}
-					}
-				}
 			}
 			.apartment-image {
 				height: 60%;
@@ -127,8 +107,9 @@
 		padding: 0 3.8125rem;
 		@media (max-width: 767px) {
 			// Styles for mobile screens
-			grid-template-columns: 1fr;
+			grid-template-columns: repeat(2, 1fr);
 			gap: 1.25rem;
+			padding: 0 1.25rem;
 		}
 	}
 
