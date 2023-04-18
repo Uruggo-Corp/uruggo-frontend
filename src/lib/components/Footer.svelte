@@ -54,11 +54,18 @@
 			display: flex;
 			justify-content: space-between;
 			align-items: flex-start;
+			@media (max-width: 766px) {
+				display: block;
+			}
+
 			.footer-item {
 				width: 33%;
 				display: flex;
 				flex-direction: column;
 				text-align: left;
+				@media (max-width: 766px) {
+					width: 50%;
+				}
 				a {
 					color: #fff;
 					text-decoration: none;

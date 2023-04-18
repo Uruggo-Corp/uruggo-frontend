@@ -58,6 +58,10 @@
 
 <style lang="scss">
 	.apartments {
+		padding: 6.25rem 0;
+		@media (max-width: 767px) {
+			padding: 2.5625rem 0;
+		}
 		h2 {
 			text-align: center;
 			font-weight: 700;
