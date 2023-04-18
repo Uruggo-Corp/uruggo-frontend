@@ -139,13 +139,25 @@
 			border-radius: 4px;
 			@media (max-width: 767px) {
 				flex-direction: row;
+				padding: 0 1.3rem;
+				width: 90%;
+				gap: 0.875rem;
 				.apartment-image {
-					height: 100% !important;
+					height: 60% !important;
 					width: 50% !important;
+					margin: auto 0;
 				}
 				.apartment-description {
 					width: 50% !important;
 					padding: 0.5rem !important;
+					display: flex;
+					flex-direction: column;
+					justify-content: center;
+					.apartment-view-button {
+						button {
+							position: relative !important;
+						}
+					}
 				}
 			}
 			.apartment-description {
