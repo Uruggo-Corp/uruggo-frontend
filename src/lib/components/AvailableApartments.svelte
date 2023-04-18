@@ -94,6 +94,11 @@
 			overflow-x: scroll;
 			white-space: nowrap;
 		}
+		&::-webkit-scrollbar {
+			display: none;
+		}
+		-ms-overflow-style: none; /* IE and Edge */
+		scrollbar-width: none; /* Firefox */
 		.filter-item {
 			cursor: pointer;
 			color: #666565;
