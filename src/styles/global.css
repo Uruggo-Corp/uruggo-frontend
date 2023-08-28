@@ -1,0 +1,84 @@
+@import url('https://fonts.googleapis.com/css2?family=Caudex:ital,wght@0,400;0,700;1,400;1,700&family=DM+Sans:ital,opsz,wght@0,9..40,100;0,9..40,200;0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,100;1,9..40,200;1,9..40,300;1,9..40,400;1,9..40,500;1,9..40,600;1,9..40,700&display=swap');
+
+:root {
+	--primary-color: #9ba809;
+	--dark-color: #06111f;
+	--light-color: #fcfcfc;
+}
+
+html {
+	font-family: 'DM Sans', sans-serif;
+}
+
+.button {
+	padding: 10px 20px;
+	transition: all 300ms ease-in-out;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.button:hover {
+	cursor: pointer;
+	background-color: #e6e6e6;
+}
+
+.button--primary {
+	color: #fff;
+	background-color: var(--primary-color);
+	border-radius: 5px;
+}
+
+.button--primary:hover {
+	background-color: #8c9902;
+}
+
+.form-section {
+	margin-bottom: 20px;
+}
+
+.form-group {
+	display: flex;
+	align-items: center;
+	background-color: var(--light-color);
+	width: 100%;
+	border: 1px solid #b4b4b0;
+}
+
+.form-group input {
+	padding: 15px;
+	border: none;
+	border-radius: 5px;
+	width: 100%;
+	background-color: var(--light-color);
+}
+
+.form-group input:focus {
+	outline: none;
+}
+
+.form-group .icon {
+	padding: 0 15px;
+	border-radius: 5px 0 0 5px;
+	color: #b4b4b0;
+}
+
+.form-error {
+	color: red;
+	font-size: 12px;
+	margin-top: 5px;
+}
+
+.form-control {
+	padding: 15px;
+	border: none;
+	border-radius: 5px;
+	width: 100%;
+	background-color: var(--light-color);
+	border: 1px solid #b4b4b0;
+}
+
+.form-control:focus {
+	outline: none;
+	border: 1px solid var(--primary-color);
+}

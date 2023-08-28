@@ -1,0 +1,124 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  USER
+  AGENT
+}
+
+model Image {
+  id        String  @id @default(cuid())
+  listingId String
+  listing   Listing @relation(references: [id], fields: [listingId], onDelete: Cascade)
+  isDefault Boolean @default(false)
+
+  url        String
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+
+  @@index([listingId])
+  @@map("image")
+}
+
+model User {
+  id         String  @id @default(cuid())
+  email      String  @unique
+  first_name String?
+  last_name  String?
+  role       Role    @default(USER)
+
+  phone_number String?
+  avatar       String?
+  address      String?
+
+  auth_session Session[]
+  key          Key[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+
+  // Relationships
+  listings Listing[]
+
+  @@index([email, role])
+  @@map("user")
+}
+
+model Session {
+  id             String @id @unique
+  user_id        String
+  active_expires BigInt
+  idle_expires   BigInt
+  user           User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
+
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+
+  @@index([user_id])
+  @@map("session")
+}
+
+model Key {
+  id              String  @id @unique
+  hashed_password String?
+  user_id         String
+  user            User    @relation(references: [id], fields: [user_id], onDelete: Cascade)
+
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+
+  @@index([user_id])
+  @@map("key")
+}
+
+enum ListingStatus {
+  RENTED
+  AVAILABLE
+  PENDING
+}
+
+model Listing {
+  id     String        @id @default(cuid())
+  title  String
+  slug   String        @unique
+  status ListingStatus @default(PENDING)
+
+  // Property
+  street_address String
+  city           String
+  state          String
+  zip            String?
+  country        String
+
+  // Details
+  price       Int
+  description String
+  bedrooms    Int
+  bathrooms   Int
+
+  isFeatured Boolean @default(false)
+
+  // Analytics
+  views Int @default(0)
+
+  agent_id String
+  agent    User   @relation(references: [id], fields: [agent_id], onDelete: Cascade)
+
+  images Image[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+
+  @@index([agent_id])
+  @@map("listing")
+}
