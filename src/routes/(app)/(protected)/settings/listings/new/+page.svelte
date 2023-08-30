@@ -52,7 +52,7 @@
 	}}
 >
 	<div class="form-section flex flex-col md:col-span-2">
-		<label for="images" class="form-label"> Listing Images </label>
+		<label for="images" class="form-label font-serif"> Listing Images </label>
 		<ImageSelector />
 		{#if form?.errors?.images}
 			{#each form.errors.images as error}
@@ -65,7 +65,7 @@
 		{/if}
 	</div>
 	<div class="form-section md:col-span-2">
-		<label class="form-label" for="title">Title</label>
+		<label class="form-label font-serif" for="title">Title</label>
 		<input
 			type="text"
 			placeholder="Furnished 2 bedroom apartment"
@@ -80,7 +80,7 @@
 		{/if}
 	</div>
 	<div class="form-section md:col-span-2">
-		<label class="form-label" for="description">Description</label>
+		<label class="form-label font-serif" for="description">Description</label>
 		<textarea
 			placeholder="Description for furnished 2 bedroom apartment"
 			name="description"
@@ -97,7 +97,7 @@
 		{/if}
 	</div>
 	<div class="form-section">
-		<label class="form-label" for="street_address">Street Address</label>
+		<label class="form-label font-serif" for="street_address">Street Address</label>
 		<input
 			type="text"
 			placeholder="3, Adebisola Str, Oke Agba"
@@ -112,7 +112,7 @@
 		{/if}
 	</div>
 	<div class="form-section">
-		<label class="form-label" for="city">City</label>
+		<label class="form-label font-serif" for="city">City</label>
 		<input type="text" placeholder="Lagos" name="city" class="form-control" id="city" />
 		{#if form?.errors?.city}
 			{#each form.errors.city as error}
@@ -121,7 +121,7 @@
 		{/if}
 	</div>
 	<div class="form-section">
-		<label class="form-label" for="state">State</label>
+		<label class="form-label font-serif" for="state">State</label>
 		<input type="text" placeholder="Lagos" name="state" class="form-control" id="state" />
 		{#if form?.errors?.state}
 			{#each form.errors.state as error}
@@ -130,7 +130,7 @@
 		{/if}
 	</div>
 	<div class="form-section">
-		<label class="form-label" for="zip">Zip Code (optional)</label>
+		<label class="form-label font-serif" for="zip">Zip Code (optional)</label>
 		<input type="text" placeholder="104122" name="zip" class="form-control" id="zip" />
 		{#if form?.errors?.zip_code}
 			{#each form.errors.zip_code as error}
@@ -139,7 +139,7 @@
 		{/if}
 	</div>
 	<div class="form-section">
-		<label class="form-label" for="country">Country</label>
+		<label class="form-label font-serif" for="country">Country</label>
 		<input type="text" placeholder="Nigeria" name="country" class="form-control" id="country" />
 		{#if form?.errors?.country}
 			{#each form.errors.country as error}
@@ -149,7 +149,7 @@
 	</div>
 
 	<div class="form-section">
-		<label class="form-label" for="price">Price</label>
+		<label class="form-label font-serif" for="price">Price</label>
 		<input type="text" placeholder="100000" name="price" class="form-control" id="price" />
 		{#if form?.errors?.price}
 			{#each form.errors.price as error}
@@ -159,7 +159,7 @@
 	</div>
 
 	<div class="form-section">
-		<label class="form-label" for="bedrooms">Bedrooms</label>
+		<label class="form-label font-serif" for="bedrooms">Bedrooms</label>
 		<input type="text" placeholder="2" name="bedrooms" class="form-control" id="bedrooms" />
 		{#if form?.errors?.bedrooms}
 			{#each form.errors.bedrooms as error}
@@ -169,7 +169,7 @@
 	</div>
 
 	<div class="form-section">
-		<label class="form-label" for="bathrooms">Bathrooms</label>
+		<label class="form-label font-serif" for="bathrooms">Bathrooms</label>
 		<input type="text" placeholder="3" name="bathrooms" class="form-control" id="bathrooms" />
 		{#if form?.errors?.bathrooms}
 			{#each form.errors.bathrooms as error}

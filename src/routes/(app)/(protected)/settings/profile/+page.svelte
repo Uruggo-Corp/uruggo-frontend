@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import ImageSelector from '$lib/components/ImageSelector.svelte';
 	import { currentUser } from '$lib/stores/users';
 	import { showToastr } from '$lib/utils';
 
@@ -35,6 +36,7 @@
 					currentUser.set(result.data?.user);
 					showToastr('Profile updated successfully!', 'success');
 				} else if (result.status === 500) {
+					// console.log(result.data?.errors);
 					result.data?.errors.server.forEach((error) => {
 						showToastr(error, 'error');
 					});
@@ -48,6 +50,17 @@
 		};
 	}}
 >
+	<div class="form-section flex flex-col md:col-span-2">
+		<label for="images" class="form-label"> Profile Photo</label>
+		<ImageSelector inputName={'image'} displayImages={user.avatar} />
+		{#if form?.errors?.avatar}
+			{#each form.errors.avatar as error}
+				<p class="form-error">{error}</p>
+			{/each}
+		{:else}
+			<p class="form-help mt-2">Select an image, This will be your profile photo.</p>
+		{/if}
+	</div>
 	<div class="form-section">
 		<input
 			type="text"
@@ -105,7 +118,13 @@
 		{/if}
 	</div>
 	<div class="form-section md:col-span-2">
-		<button class="button button--primary w-full">Save</button>
+		<button disabled={loading} class="button button--primary w-full"
+			>{#if loading}
+				<iconify-icon icon="eos-icons:bubble-loading" width="20" style="margin-bottom: 0;" />
+			{:else}
+				Save
+			{/if}</button
+		>
 	</div>
 </form>
 

@@ -49,7 +49,7 @@ export const actions: Actions = {
 		try {
 			const validated = ListingSchema.parse(body);
 
-			let uploadedImages: any[] = [];
+			const uploadedImages: any[] = [];
 
 			for (let i = 0; i < validated.images.length; i++) {
 				const image = validated.images[i];
@@ -90,10 +90,9 @@ export const actions: Actions = {
 				message: 'Listing created successfully'
 			};
 		} catch (err) {
-			console.log(err);
 			if (err instanceof z.ZodError) {
-				let errors = err.flatten().fieldErrors as ListingValidationError;
-				let imageErrors: string[] = [];
+				const errors = err.flatten().fieldErrors as ListingValidationError;
+				const imageErrors: string[] = [];
 				if (errors.images) {
 					errors.images.forEach((error) => {
 						if (!imageErrors.includes(error)) {
