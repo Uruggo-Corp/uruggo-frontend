@@ -4,11 +4,11 @@ import {
 	PRIVATE_FIREBASE_PROJECT_ID,
 	PRIVATE_FIREBASE_STORAGE_BUCKET
 } from '$env/static/private';
-import * as admin from 'firebase-admin';
+import { credential, initializeApp, type ServiceAccount } from 'firebase-admin';
 import { getStorage } from 'firebase-admin/storage';
 import { getApps } from 'firebase-admin/app';
 
-const adminConfig: admin.ServiceAccount = {
+const adminConfig: ServiceAccount = {
 	projectId: PRIVATE_FIREBASE_PROJECT_ID,
 	clientEmail: PRIVATE_FIREBASE_CLIENT_EMAIL,
 	privateKey: PRIVATE_FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n')
@@ -17,8 +17,8 @@ const adminConfig: admin.ServiceAccount = {
 const apps = getApps();
 
 if (!apps.length)
-	admin.initializeApp({
-		credential: admin.credential.cert(adminConfig),
+	initializeApp({
+		credential: credential.cert(adminConfig),
 		storageBucket: PRIVATE_FIREBASE_STORAGE_BUCKET
 	});
 
