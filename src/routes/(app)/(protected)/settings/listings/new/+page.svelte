@@ -3,9 +3,7 @@
 	import { goto } from '$app/navigation';
 	import ImageSelector from '../../../../../../lib/components/ImageSelector.svelte';
 	import { showToastr } from '../../../../../../lib/utils';
-	import type { PageData } from './$types';
 
-	export let data: PageData;
 	export let form;
 
 	let loading = false;
