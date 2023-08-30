@@ -28,7 +28,10 @@
 			<div class="flex w-full justify-center items-center py-[25px]">
 				<div class="avatar">
 					<div class="w-24 rounded-full">
-						<img src="/seyi.jpg" alt="{$currentUser?.first_name}'s profile" />
+						<img
+							src="{$currentUser?.avatar || '/seyi.jpg'} "
+							alt="{$currentUser?.first_name}'s profile"
+						/>
 					</div>
 				</div>
 			</div>

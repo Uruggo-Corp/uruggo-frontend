@@ -16,9 +16,9 @@
 		{#if !onlyLogo}
 			{#if $currentUser}
 				<div class="space-x-[20px]">
-					<details class="dropdown dropdown-bottom dropdown-end">
-						<summary class="no-arrow cursor-pointer"
-							><div class="avatar placeholder">
+					<div class="dropdown dropdown-bottom dropdown-end">
+						<label class="no-arrow cursor-pointer" tabindex="0">
+							<div class="avatar placeholder">
 								<div class="bg-neutral-focus text-neutral-content rounded-full w-8">
 									<span class="text-xs">
 										{#if $currentUser.first_name}
@@ -28,9 +28,10 @@
 										{/if}
 									</span>
 								</div>
-							</div></summary
-						>
+							</div>
+						</label>
 						<div
+							tabindex="0"
 							class="p-5 space-y-3 shadow dropdown-content min-w-max dro z-[1] rounded-box bg-dark border border-light"
 						>
 							<a href="/settings/profile" class="hover:text-primary flex items-center space-x-3">
@@ -52,7 +53,7 @@
 								<button class="button button--primary w-full">Logout</button>
 							</form>
 						</div>
-					</details>
+					</div>
 				</div>
 			{:else}
 				<div class="space-x-[24px] flex items-center">

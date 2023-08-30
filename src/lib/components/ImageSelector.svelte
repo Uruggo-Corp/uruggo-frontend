@@ -3,12 +3,12 @@
 	import { showToastr } from '../utils';
 
 	let images: FileList | undefined = undefined;
-	export let displayImages: Image[] | undefined = undefined;
+	export let displayImages: Image[] | string | undefined = undefined;
 	let previewImage: string | undefined = undefined;
 
 	export let maximumImages: number = 10;
 	export let inputName: string = 'images';
-
+	export let allowMultiple: boolean = true;
 	const setPreview = (image: File) => {
 		previewImage = URL.createObjectURL(image);
 	};
@@ -52,7 +52,9 @@
 
 	$: {
 		if (displayImages && !images?.length) {
-			previewImage = displayImages[0].url;
+			if (displayImages instanceof Array) {
+				previewImage = displayImages[0]?.url;
+			} else previewImage = displayImages;
 		}
 	}
 </script>
@@ -82,7 +84,7 @@
 			id={inputName}
 			class="w-full cursor-pointer h-full absolute z-10 opacity-0"
 			accept="image/*"
-			multiple
+			multiple={maximumImages > 1}
 		/>
 		{#if !previewImage}
 			<p>Upload image</p>
@@ -104,13 +106,19 @@
 		<div
 			class="py-1 px-3 w-full flex space-x-5 rounded-b bg-primary/30 border-b-2 border-l-2 border-r-2 border-dashed border-primary"
 		>
-			{#each displayImages as image}
-				<button type="button" on:click={() => (previewImage = image.url)}>
-					<div class="w-[50px] h-[50px] flex relative cursor-pointer">
-						<img src={image.url} alt="" />
-					</div>
-				</button>
-			{/each}
+			{#if displayImages instanceof Array}
+				{#each displayImages as image}
+					<button type="button" on:click={() => (previewImage = image.url)}>
+						<div class="w-[50px] h-[50px] flex relative cursor-pointer">
+							<img src={image.url} alt="" />
+						</div>
+					</button>
+				{/each}
+			{:else}
+				<div class="w-[50px] h-[50px] flex relative cursor-pointer">
+					<img src={displayImages} alt="" />
+				</div>
+			{/if}
 		</div>
 	{/if}
 </div>
