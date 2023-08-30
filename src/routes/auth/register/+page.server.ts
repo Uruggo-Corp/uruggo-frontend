@@ -2,7 +2,7 @@ import { fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import { z } from 'zod';
 import { auth } from '$lib/server/lucia';
-import { Role } from '@prisma/client';
+import { Role } from '$lib/types/roles.types';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 export const load = (async () => {

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { currentUser } from '$lib/stores/users';
-	import { Role } from '@prisma/client';
+	import { Role } from '$lib/types/roles.types';
 
 	const navLinks = [
 		{

@@ -1,4 +1,4 @@
-import { Role } from '@prisma/client';
+import { Role } from '$lib/types/roles.types';
 
 const navLinks = [
 	{

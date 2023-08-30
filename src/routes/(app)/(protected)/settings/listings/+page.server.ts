@@ -1,7 +1,8 @@
-import { ListingStatus, Role } from '@prisma/client';
+import { ListingStatus } from '@prisma/client';
 import type { PageServerLoad } from './$types';
 import { redirect, type Actions } from '@sveltejs/kit';
 import prisma from '$lib/server/prisma';
+import { Role } from '$lib/types/roles.types';
 
 export const load = (async ({ locals }) => {
 	const session = await locals.auth.validate();

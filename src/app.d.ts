@@ -1,7 +1,8 @@
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
 
-import type { Role, Session, User } from '@prisma/client';
+import type { Session, User } from '@prisma/client';
+import { Role } from './lib/types/roles.types';
 
 declare global {
 	namespace App {

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { currentUser } from '$lib/stores/users';
-	import { Role } from '@prisma/client';
+	import { Role } from '$lib/types/roles.types';
 
 	export let onlyLogo: Boolean = false;
 	export let isFixed: Boolean = false;
