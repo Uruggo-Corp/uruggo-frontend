@@ -4,11 +4,13 @@ import {
 	PRIVATE_FIREBASE_PROJECT_ID,
 	PRIVATE_FIREBASE_STORAGE_BUCKET
 } from '$env/static/private';
-import { credential, initializeApp, type ServiceAccount } from 'firebase-admin';
+import admin from 'firebase-admin';
 import { getStorage } from 'firebase-admin/storage';
 import { getApps } from 'firebase-admin/app';
 
-const adminConfig: ServiceAccount = {
+const { credential, initializeApp } = admin;
+
+const adminConfig: any = {
 	projectId: PRIVATE_FIREBASE_PROJECT_ID,
 	clientEmail: PRIVATE_FIREBASE_CLIENT_EMAIL,
 	privateKey: PRIVATE_FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n')

@@ -41,6 +41,7 @@
 		"@lucia-auth/adapter-prisma": "^3.0.1",
 		"@lucia-auth/sveltekit": "^0.6.11",
 		"@prisma/client": "5.1.1",
+		"@sveltejs/adapter-netlify": "^2.0.8",
 		"argon2": "^0.31.0",
 		"firebase-admin": "^11.10.1",
 		"iconify-icon": "^1.0.8",
