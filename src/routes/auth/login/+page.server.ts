@@ -3,6 +3,7 @@ import type { PageServerLoad } from './$types';
 import { z } from 'zod';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { auth } from '$lib/server/lucia';
+import { LuciaError } from 'lucia';
 
 let schema = z.object({
 	email: z
@@ -70,7 +71,14 @@ export let actions: Actions = {
 					return fail(409, toSend);
 				}
 				return fail(500, toSend);
+			} else if (error instanceof LuciaError) {
+				if (error.message === 'AUTH_INVALID_KEY_ID') {
+					toSend.errors.server = ['Invalid email or password'];
+					return fail(401, toSend);
+				}
+				return fail(500, toSend);
 			} else {
+				console.log(typeof error, error);
 				return fail(500, toSend);
 			}
 		}

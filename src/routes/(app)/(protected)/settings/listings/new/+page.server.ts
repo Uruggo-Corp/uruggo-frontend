@@ -59,6 +59,8 @@ export const actions: Actions = {
 				uploadedImages.push(imageUrl);
 			}
 
+			console.log(uploadedImages);
+
 			await prisma.listing.create({
 				data: {
 					...validated,
