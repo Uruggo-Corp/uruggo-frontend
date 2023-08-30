@@ -64,10 +64,8 @@
 			>
 				Edit
 			</a>
-			<button
-				onclick="deleteModal.showModal()"
-				on:click={handleDelete}
-				class=" text-lg text-red-600 hover:text-red-700">Delete</button
+			<button on:click={handleDelete} class=" text-lg text-red-600 hover:text-red-700"
+				>Delete</button
 			>
 		</div>
 	</div>

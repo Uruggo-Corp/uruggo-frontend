@@ -6,6 +6,7 @@
 	import type { PageData } from './$types';
 
 	export let data: PageData;
+	let dialog: any;
 
 	let listings: ListingWithImages[] = data.listings;
 
@@ -13,8 +14,12 @@
 	let listingToDelete: ListingWithImages;
 
 	const handleDelete = (e: any) => {
-		deleteModalOpen = true;
+		dialog.showModal();
 		listingToDelete = e.detail;
+	};
+
+	const closeModal = () => {
+		dialog.close();
 	};
 
 	let listingStatusFilters = [
@@ -86,8 +91,8 @@
 	</div>
 {/if}
 
-<dialog id="deleteModal" class="modal">
-	<form method="dialog" id="dialogForm" class="modal-box rounded-[5px]">
+<dialog class="modal" bind:this={dialog}>
+	<div class="modal-box">
 		<form
 			id="deleteForm"
 			action="?/delete"
@@ -112,11 +117,9 @@
 			{/if}
 			<div class="modal-action">
 				<!-- if there is a button, it will close the modal -->
-				<button class="button" form="dialogForm">Close</button>
-				<button onclick="deleteModal.close()" class="button button--error" form="deleteForm"
-					>Delete</button
-				>
+				<button class="button" on:click={closeModal} type="button">Close</button>
+				<button on:click={closeModal} class="button button--error">Delete</button>
 			</div>
 		</form>
-	</form>
+	</div>
 </dialog>

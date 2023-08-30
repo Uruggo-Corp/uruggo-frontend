@@ -43,7 +43,7 @@
 		"@prisma/client": "5.1.1",
 		"@sveltejs/adapter-netlify": "^2.0.8",
 		"argon2": "^0.31.0",
-		"firebase-admin": "^11.10.1",
+		"axios": "^1.5.0",
 		"iconify-icon": "^1.0.8",
 		"lucia": "^2.4.0",
 		"prisma": "^5.2.0",

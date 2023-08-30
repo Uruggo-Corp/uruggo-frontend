@@ -2,7 +2,7 @@ import { redirect, type Actions, fail } from '@sveltejs/kit';
 import prisma from '../../../../../../lib/server/prisma';
 import type { PageServerLoad } from './$types';
 import { z } from 'zod';
-import { deleteImage, uploadImage } from '$lib/server/firebase';
+import { deleteImage, uploadImage } from '$lib/server/upload';
 import { slugifyTitle } from '$lib/utils';
 import { ListingSchema, type ListingValidationError } from '$lib/schemas/listing.schema';
 

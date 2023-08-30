@@ -1,7 +1,7 @@
 import { fail, type Actions, redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { z } from 'zod';
-import { uploadImage } from '$lib/server/firebase';
+import { uploadImage } from '$lib/server/upload';
 import prisma from '$lib/server/prisma';
 import { slugifyTitle } from '$lib/utils';
 import { ListingSchema, type ListingValidationError } from '$lib/schemas/listing.schema';
@@ -88,6 +88,7 @@ export const actions: Actions = {
 				message: 'Listing created successfully'
 			};
 		} catch (err) {
+			console.log(err);
 			if (err instanceof z.ZodError) {
 				let errors = err.flatten().fieldErrors as ListingValidationError;
 				let imageErrors: string[] = [];
