@@ -4,6 +4,7 @@
 	--primary-color: #9ba809;
 	--dark-color: #06111f;
 	--light-color: #fcfcfc;
+	--error-color: #dc2626;
 }
 
 html {
@@ -26,6 +27,12 @@ html {
 .button--primary {
 	color: #fff;
 	background-color: var(--primary-color);
+	border-radius: 5px;
+}
+
+.button--error {
+	color: #fff;
+	background-color: var(--error-color);
 	border-radius: 5px;
 }
 
@@ -81,4 +88,15 @@ html {
 .form-control:focus {
 	outline: none;
 	border: 1px solid var(--primary-color);
+}
+
+.form-label {
+	display: block;
+	margin-bottom: 5px;
+}
+
+.form-help {
+	color: #90908c;
+	font-size: small;
+	font-weight: 400;
 }

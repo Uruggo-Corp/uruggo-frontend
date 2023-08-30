@@ -19,14 +19,16 @@
 	];
 </script>
 
-<div class="flex flex-row min-h-max h-[95vh]">
-	<aside class="flex flex-col w-64 bg-gray-100 border-r border-gray-200">
+<div class="md:flex hidden flex-row">
+	<aside
+		class="flex flex-col w-64 h-screen fixed top-0 left-0 z-20 pt-20 bg-gray-100 border-r border-gray-200"
+	>
 		<div class="border-b border-[#B4B4B0] mx-5 py-3">
 			<!-- Profile -->
 			<div class="flex w-full justify-center items-center py-[25px]">
 				<div class="avatar">
 					<div class="w-24 rounded-full">
-						<img src="/profile.png" alt="{$currentUser?.first_name}'s profile" />
+						<img src="/seyi.jpg" alt="{$currentUser?.first_name}'s profile" />
 					</div>
 				</div>
 			</div>
@@ -67,7 +69,10 @@
 			</button>
 		</form>
 	</aside>
-	<main class="flex flex-col flex-grow p-5 md:p-10">
+	<main class="flex flex-col flex-grow p-5 md:p-10 ml-64">
 		<slot />
 	</main>
+</div>
+<div class="md:hidden flex flex-col flex-grow p-5">
+	<slot />
 </div>

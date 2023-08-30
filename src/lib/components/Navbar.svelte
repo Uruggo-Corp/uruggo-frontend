@@ -6,7 +6,7 @@
 	export let isFixed: Boolean = false;
 </script>
 
-<div class="bg-dark py-4 text-white {isFixed ? 'fixed w-screen' : ''}">
+<div class="bg-dark py-4 z-50 text-white {isFixed ? 'fixed w-screen' : ''}">
 	<div class="flex items-center justify-between container container-padding mx-auto">
 		<div>
 			<a href="/">
@@ -33,14 +33,20 @@
 						<div
 							class="p-5 space-y-3 shadow dropdown-content min-w-max dro z-[1] rounded-box bg-dark border border-light"
 						>
-							<a href="/settings/profile" class="hover:text-primary flex space-x-3">
-								{#if $currentUser.role === Role.AGENT}
-									<iconify-icon icon="material-symbols:dashboard" width="20" />
-									<span>Agent dashboard</span>
-								{:else}
-									<iconify-icon icon="iconamoon:profile" width="20" />
-									<span>My profile</span>
-								{/if}
+							<a href="/settings/profile" class="hover:text-primary flex items-center space-x-3">
+								<iconify-icon icon="mdi-light:settings" width="20" />
+								<span>My Profile</span>
+							</a>
+
+							{#if $currentUser.role === Role.AGENT}
+								<a href="/settings/listings" class="hover:text-primary flex items-center space-x-3">
+									<iconify-icon icon="system-uicons:home" width="20" />
+									<span>My Listings</span>
+								</a>
+							{/if}
+							<a href="/settings" class="hover:text-primary flex md:hidden items-center space-x-3">
+								<iconify-icon icon="mdi-light:settings" width="20" />
+								<span>Settings</span>
 							</a>
 							<form action="/?/logout" method="post" class="w-full">
 								<button class="button button--primary w-full">Logout</button>
@@ -49,7 +55,7 @@
 					</details>
 				</div>
 			{:else}
-				<div class="space-x-[20px]">
+				<div class="space-x-[24px] flex items-center">
 					<a href="/auth/login">Login</a>
 					<a href="/auth/register" class="button button--primary">Register</a>
 				</div>

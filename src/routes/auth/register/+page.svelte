@@ -2,8 +2,8 @@
 	import { enhance } from '$app/forms';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import { currentUser } from '../../../lib/stores/users.js';
-	import { showToastr } from '../../../lib/utils.js';
+	import { currentUser } from '$lib/stores/users.js';
+	import { showToastr } from '$lib/utils.js';
 
 	type UserTypes = 'user' | 'agent';
 	let registerType: UserTypes = 'user';

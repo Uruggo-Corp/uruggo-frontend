@@ -1,19 +1,27 @@
 <script lang="ts">
-	import type { ListingWithImages } from '../types/listings.types';
 	import { formatCurrency, getDefaultImage } from '../utils';
+	import { createEventDispatcher } from 'svelte';
+	import type { ListingWithImages } from '../types/listings.types';
 
-	export let inRecommended: boolean = false;
 	export let listing: ListingWithImages;
+
+	const dispatch = createEventDispatcher();
+
+	const handleDelete = () => {
+		dispatch('delete', listing);
+	};
 </script>
 
 <div class="overflow-hidden rounded-[5px] border border-dark flex flex-col">
 	<div class="w-full overflow-hidden relative">
 		<div class="relative">
-			<a href="/listings/{listing.slug}" class="group relative">
+			<div class="badge badge-neutral absolute z-20 right-3 top-3">{listing.status}</div>
+			<a href="/settings/listings/{listing.slug}" class="group relative">
 				<div
 					class="opacity-0 z-10 space-x-2 text-white font-medium text-lg flex justify-center items-center group-hover:opacity-40 bg-dark absolute top-0 w-full h-full transition-all duration-300"
 				>
-					<span> View </span>
+					<iconify-icon icon="iconamoon:edit-duotone" width="20" />
+					<span> Edit </span>
 				</div>
 				<img
 					src={getDefaultImage(listing.images).url}
@@ -43,14 +51,24 @@
 						fill="#41413F"
 					/>
 				</svg>
-				<span class="text-sm"> {listing.city}, {listing.country} </span>
+				<span class="text-sm">
+					{listing.city}, {listing.country}
+				</span>
 			</div>
-		</div>
-		<div class="flex justify-between items-end">
 			<p class="text-dark font-bold">{formatCurrency(listing.price)}/yr</p>
-			{#if !inRecommended}
-				<a href="/listings/{listing.slug}" class="px-5 py-2 bg-[#DCE4EF] text-lg">View</a>
-			{/if}
+		</div>
+		<div class="flex justify-between items-end mt-3">
+			<a
+				href="/settings/listings/{listing.slug}"
+				class=" text-lg text-primary hover:text-primary-hover"
+			>
+				Edit
+			</a>
+			<button
+				onclick="deleteModal.showModal()"
+				on:click={handleDelete}
+				class=" text-lg text-red-600 hover:text-red-700">Delete</button
+			>
 		</div>
 	</div>
 </div>

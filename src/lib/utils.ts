@@ -1,3 +1,4 @@
+import type { Image } from '@prisma/client';
 import toast from 'svelte-french-toast';
 
 export const showToastr = (message: string, type: string | null) => {
@@ -30,4 +31,39 @@ export const showToastr = (message: string, type: string | null) => {
 			});
 		}
 	}
+};
+
+export const getDefaultImage = (images: Image[]) => {
+	let defaultImage = images.find((image) => image.isDefault === true);
+
+	if (!defaultImage) {
+		defaultImage = images[0];
+	}
+
+	return defaultImage;
+};
+
+export const formatCurrency = (amount: number) => {
+	return new Intl.NumberFormat('en-US', {
+		style: 'currency',
+		currency: 'NGN',
+		minimumFractionDigits: 0,
+		// Use the naira sign, instead of the Naira code
+		currencyDisplay: 'symbol'
+	})
+		.format(amount)
+		.replace('NGN', '₦');
+};
+
+import slugify from 'slugify';
+
+export const slugifyTitle = (title: string) => {
+	return (
+		slugify(title, {
+			lower: true,
+			strict: true
+		}) +
+		'-' +
+		Math.floor(Math.random() * 1000000)
+	);
 };

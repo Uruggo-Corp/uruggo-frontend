@@ -1,5 +1,9 @@
 <script lang="ts">
+	import { enhance } from '$app/forms';
 	import { currentUser } from '$lib/stores/users';
+	import { showToastr } from '$lib/utils';
+
+	export let form;
 
 	let loading = false;
 
@@ -10,6 +14,8 @@
 		address: '',
 		avatar: ''
 	};
+
+	$: if ($currentUser) user = $currentUser;
 </script>
 
 <svelte:head>
@@ -18,33 +24,71 @@
 
 <h2 class="text-3xl text-dark font-serif mb-10">Profile</h2>
 
-<form class="grid grid-cols-1 md:grid-cols-2 gap-5" action="" method="post">
+<form
+	class="grid grid-cols-1 md:grid-cols-2 gap-5"
+	method="post"
+	use:enhance={() => {
+		loading = true;
+		return async ({ update, result }) => {
+			try {
+				if (result.data?.success) {
+					currentUser.set(result.data?.user);
+					showToastr('Profile updated successfully!', 'success');
+				} else if (result.status === 500) {
+					result.data?.errors.server.forEach((error) => {
+						showToastr(error, 'error');
+					});
+				} else {
+					showToastr('Please check your form for errors.', 'error');
+				}
+			} finally {
+				loading = false;
+				update();
+			}
+		};
+	}}
+>
 	<div class="form-section">
 		<input
 			type="text"
 			placeholder="First name"
-			name="firstName"
+			name="first_name"
 			bind:value={user.first_name}
 			class="form-control"
 		/>
+		{#if form?.errors?.first_name}
+			{#each form.errors.first_name as error}
+				<p class="form-error">{error}</p>
+			{/each}
+		{/if}
 	</div>
 	<div class="form-section">
 		<input
 			type="text"
 			placeholder="Last name"
-			name="lastName"
+			name="last_name"
 			bind:value={user.last_name}
 			class="form-control"
 		/>
+		{#if form?.errors?.last_name}
+			{#each form.errors.last_name as error}
+				<p class="form-error">{error}</p>
+			{/each}
+		{/if}
 	</div>
 	<div class="form-section">
 		<input
 			type="text"
 			placeholder="Phone number"
-			name="phoneNumber"
+			name="phone_number"
 			bind:value={user.phone_number}
 			class="form-control"
 		/>
+		{#if form?.errors?.phone_number}
+			{#each form.errors.phone_number as error}
+				<p class="form-error">{error}</p>
+			{/each}
+		{/if}
 	</div>
 	<div class="form-section">
 		<input
@@ -54,8 +98,13 @@
 			bind:value={user.address}
 			class="form-control"
 		/>
+		{#if form?.errors?.address}
+			{#each form.errors.address as error}
+				<p class="form-error">{error}</p>
+			{/each}
+		{/if}
 	</div>
-	<div class="form-section col-span-2">
+	<div class="form-section md:col-span-2">
 		<button class="button button--primary w-full">Save</button>
 	</div>
 </form>

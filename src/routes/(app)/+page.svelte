@@ -1,5 +1,7 @@
 <script lang="ts">
 	import ApartmentCard from '$lib/components/ApartmentCard.svelte';
+	import type { ListingWithImages } from '../../lib/types/listings.types';
+	import type { PageData } from './$types';
 
 	const apartmentTypes = [
 		{
@@ -39,6 +41,9 @@
 		selectedApartmentType =
 			apartmentTypes.find((type) => type.value === value)?.value || apartmentTypes[0].value;
 	};
+
+	export let data: PageData;
+	let listings: ListingWithImages[] = data.listings as ListingWithImages[];
 </script>
 
 <svelte:head>
@@ -89,20 +94,20 @@
 <section class="my-[80px] container container-padding mx-auto">
 	<h3 class="text-center text-3xl font-serif text-dark font-bold">Available Apartments</h3>
 	<div class="mt-[40px] grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-[20px] mx-auto">
-		{#each { length: 9 } as _}
-			<ApartmentCard />
+		{#each listings as listing}
+			<ApartmentCard {listing} />
 		{/each}
 	</div>
 </section>
 
-<section class="my-[80px] container container-padding mx-auto">
+<!-- <section class="my-[80px] container container-padding mx-auto">
 	<h3 class="text-center text-3xl font-serif text-dark font-bold">Recommended for you</h3>
 	<div class="mt-[40px] grid md:grid-cols-3 lg:grid-cols-4 gap-[20px]">
 		{#each { length: 8 } as _}
 			<ApartmentCard inRecommended />
 		{/each}
 	</div>
-</section>
+</section> -->
 
 <style>
 	.filter {

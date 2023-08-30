@@ -4,9 +4,9 @@
 	import '../styles/global.css';
 	import 'iconify-icon';
 	import { Toaster } from 'svelte-french-toast';
-	import { currentUser } from '../lib/stores/users';
+	import { currentUser } from '$lib/stores/users';
 	import { page } from '$app/stores';
-	import { showToastr } from '../lib/utils';
+	import { showToastr } from '$lib/utils';
 	export let data;
 
 	let url = $page.url;

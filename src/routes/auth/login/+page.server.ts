@@ -2,7 +2,7 @@ import { fail, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { z } from 'zod';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
-import { auth } from '../../../lib/server/lucia';
+import { auth } from '$lib/server/lucia';
 
 let schema = z.object({
 	email: z

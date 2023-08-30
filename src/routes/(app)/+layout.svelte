@@ -5,8 +5,8 @@
 </script>
 
 <div class="flex flex-col min-h-screen">
-	<Navbar />
-	<main class="mb-auto">
+	<Navbar isFixed />
+	<main class="mb-auto mt-[60px]">
 		<slot />
 	</main>
 	{#if !$page.url.pathname.includes('/settings')}
