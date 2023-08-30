@@ -3,6 +3,9 @@
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
+		"db:migrate": "prisma migrate deploy",
+		"db:generate": "prisma generate",
+		"db:setup": "pnpm run db:migrate && pnpm run db:generate",
 		"dev": "vite dev",
 		"build": "vite build",
 		"preview": "vite preview",
