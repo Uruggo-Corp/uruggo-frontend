@@ -12,6 +12,9 @@
 
 	export let form;
 	let loading = false;
+
+	let passwordVisible = false;
+	let confirmPasswordVisible = false;
 </script>
 
 <svelte:head>
@@ -226,8 +229,17 @@
 								/>
 							</svg>
 						</div>
-						<input type="password" name="password" placeholder="Password" class="form-control" />
-						<button class="icon" type="button">
+						<input
+							type={passwordVisible ? 'text' : 'password'}
+							name="password"
+							placeholder="Password"
+							class="form-control"
+						/>
+						<button
+							on:click={() => (passwordVisible = !passwordVisible)}
+							class="icon"
+							type="button"
+						>
 							<svg
 								class="eye"
 								width="24"
@@ -294,12 +306,16 @@
 							</svg>
 						</div>
 						<input
-							type="password"
+							type={confirmPasswordVisible ? 'text' : 'password'}
 							name="confirmPassword"
 							placeholder="Confirm password"
 							class="form-control"
 						/>
-						<button class="icon" type="button">
+						<button
+							on:click={() => (confirmPasswordVisible = !confirmPasswordVisible)}
+							class="icon"
+							type="button"
+						>
 							<svg
 								class="eye"
 								width="24"
