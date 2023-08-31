@@ -1,6 +1,6 @@
 <footer class="bg-dark text-white py-[46px]">
 	<div class="container container-padding mx-auto">
-		<div class="grid md:grid-cols-3 grid-cols-1 gap-3 md:gap-0">
+		<div class="grid md:grid-cols-3 grid-cols-1 gap-5 md:gap-0">
 			<div>
 				<h4 class="text-[#C4DCFA] text-2xl mb-[24px]">Company</h4>
 				<div class="space-y-[12px]">
