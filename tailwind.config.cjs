@@ -8,6 +8,8 @@ const config = {
 				dark: '#06111F',
 				light: '#FCFCFC',
 				primary: '#9BA809',
+				secondary: '#41413F',
+				gray: '#B4B4B0',
 				'primary-hover': '#8c9902'
 				// text: '#666565'
 			},
