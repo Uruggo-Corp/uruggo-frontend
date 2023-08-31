@@ -28,6 +28,7 @@
 <form
 	class="grid grid-cols-1 md:grid-cols-2 gap-5"
 	method="post"
+	enctype="multipart/form-data"
 	use:enhance={() => {
 		loading = true;
 		return async ({ update, result }) => {
