@@ -11,14 +11,17 @@
 >
 	<div class="border-b border-[#B4B4B0] mx-5 py-3">
 		<!-- Profile -->
-		<div class="flex w-full justify-center items-center py-[25px]">
+		<div class="flex w-full justify-center items-center py-[15px]">
 			<div class="avatar">
 				<div class="w-24 rounded-full">
-					<img src="/seyi.jpg" alt="{$currentUser?.first_name}'s profile" />
+					<img
+						src={$currentUser?.avatar || '/seyi.jpg'}
+						alt="{$currentUser?.first_name}'s profile"
+					/>
 				</div>
 			</div>
 		</div>
-		<div class="mt-[11px] text-center">
+		<div class="mt-[8px] text-center">
 			<h2 class="text-black text-xl">
 				{$currentUser?.first_name || 'Agent'}
 				{$currentUser?.last_name || 'Doe'}
