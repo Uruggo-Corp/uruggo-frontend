@@ -27,10 +27,11 @@ export const uploadImage = async (file: File) => {
 };
 
 export const deleteImage = async (url: string) => {
-	let fileName = url.split('/').pop()?.split('?')[0];
+	let fileName = url.split('/').at(-1)?.split('.')[0];
 
 	try {
-		await axios.delete(`${PRIVATE_UPLOAD_API_URL}/delete/${fileName}`);
+		const { data } = await axios.delete(`${PRIVATE_UPLOAD_API_URL}/delete/${fileName}`);
+		console.log(data);
 	} catch (error: any) {
 		throw new UploadError(error.message || 'An error occurred while deleting image');
 	}
