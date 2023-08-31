@@ -6,6 +6,10 @@
 	const { listing } = data;
 </script>
 
+<svelte:head>
+	<title>{listing.title} - Uruggo</title>
+</svelte:head>
+
 <main class="container container-padding mx-auto my-[40px]" role="contentinfo">
 	<section class="grid w-full grid-cols-1 md:grid-cols-2 gap-2" role="main">
 		<div class="w-full flex flex-row-reverse md:flex-col gap-3">
@@ -30,7 +34,10 @@
 				<h1 class="font-primary text-secondary text-2xl md:text-[30px]" style="line-height: 41px;">
 					{listing.title}
 				</h1>
-				<h3 class="font-bold font-primary text-dark text-[32px]" style="line-height: 52px;">
+				<h3
+					class="font-bold font-primary text-dark text-[26px] md:text-[32px]"
+					style="line-height: 52px;"
+				>
 					{formatCurrency(listing.price)}/yr
 				</h3>
 
