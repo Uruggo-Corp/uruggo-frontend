@@ -18,17 +18,25 @@
 				<div class="space-x-[20px]">
 					<div class="dropdown dropdown-bottom dropdown-end">
 						<label class="no-arrow cursor-pointer" tabindex="0">
-							<div class="avatar placeholder">
-								<div class="bg-neutral-focus text-neutral-content rounded-full w-8">
-									<span class="text-xs">
-										{#if $currentUser.first_name}
-											{$currentUser.first_name[0]}
-										{:else}
-											S
-										{/if}
-									</span>
+							{#if $currentUser.avatar}
+								<div class="avatar">
+									<div class="w-8 rounded-full">
+										<img src={$currentUser.avatar} />
+									</div>
 								</div>
-							</div>
+							{:else}
+								<div class="avatar placeholder">
+									<div class="bg-neutral-focus text-neutral-content rounded-full w-8">
+										<span class="text-xs">
+											{#if $currentUser.first_name}
+												{$currentUser.first_name[0]}
+											{:else}
+												S
+											{/if}
+										</span>
+									</div>
+								</div>
+							{/if}
 						</label>
 						<div
 							tabindex="0"
