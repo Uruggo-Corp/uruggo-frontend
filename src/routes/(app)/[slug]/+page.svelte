@@ -4,6 +4,7 @@
 
 	export let data: PageData;
 	const { listing } = data;
+	console.log(listing);
 </script>
 
 <svelte:head>
