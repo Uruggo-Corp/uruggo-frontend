@@ -34,7 +34,7 @@ export const showToastr = (message: string, type: string | null) => {
 };
 
 export const getDefaultImage = (images: Image[]) => {
-	let defaultImage = images.find((image) => image.isDefault === true);
+	let defaultImage = images?.find((image) => image.isDefault === true);
 
 	if (!defaultImage) {
 		defaultImage = images[0];
@@ -56,6 +56,7 @@ export const formatCurrency = (amount: number) => {
 };
 
 import slugify from 'slugify';
+import type { ListingWithImages } from './types/listings.types';
 
 export const slugifyTitle = (title: string) => {
 	return (

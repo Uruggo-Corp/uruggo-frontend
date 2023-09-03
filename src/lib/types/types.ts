@@ -1,4 +1,5 @@
 export type Option = {
+	[key: string]: string | number;
 	name: string;
 	value: number;
 };

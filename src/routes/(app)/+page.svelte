@@ -1,7 +1,7 @@
 <script lang="ts">
 	import ApartmentCard from '$lib/components/ApartmentCard.svelte';
 	import type { ListingWithImages } from '$lib/types/listings.types';
-	import type { PageData } from './$types';
+	import type { ActionData, PageData } from './$types';
 	import Selector from '$lib/components/Selector.svelte';
 	import type { FilterValidationError, Option } from '$lib/types/types';
 	import { fly } from 'svelte/transition';
@@ -22,15 +22,10 @@
 			name: '3 bedrooms',
 			value: 3
 		},
-		// Till 4 bedrooms
 		{
 			name: '4 bedrooms',
 			value: 4
 		}
-		// {
-		// 	name: 'All',
-		// 	value: 'all'
-		// }
 	];
 
 	const bathTypes: Option[] = [
@@ -63,17 +58,23 @@
 	let advancedFilterModal: HTMLDialogElement;
 
 	export let data: PageData;
+	export let form: ActionData;
 	let listings: ListingWithImages[] = data.listings as ListingWithImages[];
-
-	$: console.log(data);
+	$: filteredListings = form?.filtered as ListingWithImages[];
 
 	let fetching: boolean = false;
 
 	const filter: SubmitFunction = async ({ formData }) => {
+		bathrooms && formData.set('bathrooms', `${bathrooms}`);
+		bedrooms && formData.set('bedrooms', `${bedrooms}`);
+
 		fetching = true;
 		return async ({ update, result }) => {
 			try {
 				if (result.status === 200) {
+					if (filteredListings) {
+						listings = filteredListings;
+					}
 					showToastr('Filter successful.', 'success');
 				} else if (result.status === 500) {
 					result?.data?.errors?.server.forEach((error) => {
@@ -91,7 +92,22 @@
 			}
 		};
 	};
+
 	let errors: FilterValidationError;
+
+	let bathrooms: string;
+	let bedrooms: string;
+
+	let clearFilters: boolean = false;
+
+	const clear = () => {
+		clearFilters = true;
+		listings = data.listings as ListingWithImages[];
+	};
+	let location: string;
+	$: if (clearFilters) {
+		location = '';
+	}
 </script>
 
 <svelte:head>
@@ -104,6 +120,13 @@
 	{/if}
 </svelte:head>
 
+{#if filteredListings}
+	<button
+		on:click={clear}
+		class="fixed bottom-28 sm:bottom-5 bg-dark text-white right-3 py-3 px-6 rounded-full"
+		>Clear filters</button
+	>
+{/if}
 <section class="filter container container-padding mx-auto my-[40px]">
 	<div class="search-input-group bg-light">
 		<!-- For more settings use the AutoHTML plugin tab ... -->
@@ -130,27 +153,27 @@
 		use:enhance={filter}
 		action="?/filter"
 		method="post"
-		class="gap-x-[40px] gap-y-2 bg-dark relative h-[70px] items-center py-6 rounded-lg px-3 overflow-x-scroll carousel md:w-fit w-full"
+		class="sm:gap-x-[40px] sm:gap-y-2 gap-x-[20px] gap-y-4 bg-dark relative items-center py-4 rounded-lg px-3 overflow-x-scroll grid grid-cols-2 sm:flex sm:flex-wrap sm:justify-between lg: md:w-fit w-full"
 		style="overflow: visible;"
 	>
 		<dialog
-			class="max-w-[32rem] rounded px-10 py-6 bg-white w-full z-50"
+			class="max-w-[32rem] rounded px-3 sm:px-10 py-6 bg-white w-full z-50"
 			in:fly={{ x: 200, delay: 300, duration: 500 }}
 			bind:this={advancedFilterModal}
 		>
 			<div class="w-full flex justify-between text-dark mb-8 items-center">
 				<h1 class="text-2xl font-medium font-serif">Filter Listings</h1>
-				<button class="flex items-center" on:click={() => advancedFilterModal.close()}
+				<button type="button" class="flex items-center" on:click={() => advancedFilterModal.close()}
 					><iconify-icon width="25" icon="formkit:close" /></button
 				>
 			</div>
 
 			<div class="w-full grid grid-cols-2 gap-5">
 				<div class="w-full col-span-2 flex flex-col gap-1">
-					<label class="font-medium text-sm" for="price-range">Price range</label>
-					<div class="flex items-center gap-2">
+					<label class="font-medium text-xs sm:text-sm" for="price-range">Price range</label>
+					<div class="flex items-center gap-1 sm:gap-2">
 						<input
-							class="outline-none border border-primary hover:border-primary focus:border-primary placeholder-shown:border-dark/20 rounded px-2 py-1"
+							class="outline-none border border-primary hover:border-primary focus:border-primary placeholder-shown:border-dark/20 rounded px-1 py-1 sm:px-2"
 							id="price-min"
 							name="price-range"
 							type="number"
@@ -158,7 +181,7 @@
 						/>
 						<span>to</span>
 						<input
-							class="outline-none border border-primary hover:border-primary focus:border-primary placeholder-shown:border-dark/20 rounded px-2 py-1"
+							class="outline-none border border-primary hover:border-primary focus:border-primary placeholder-shown:border-dark/20 rounded px-1.5 py-1 sm:px-2"
 							id="price-max"
 							name="price-range"
 							type="number"
@@ -170,20 +193,24 @@
 					{/if}
 				</div>
 				<div class="flex flex-col mb-10 h-3 relative" style="overflow: visible;">
-					<label class="font-medium text-sm" for="listing-type">Room(s)</label>
+					<label class="font-medium text-sm" for="filter-listing-type">Room(s)</label>
 					<Selector
+						{clearFilters}
+						on:change={(e) => (bedrooms = `${e.detail}`)}
 						className="border rounded border-dark/20 text-dark hover:border-primary"
 						inputName="filter-listing-type"
-						placeholder="Select bedrooms"
+						placeholder="Bedrooms"
 						options={apartmentTypes}
 					/>
 				</div>
 				<div class="flex flex-col mb-10 h-3 relative">
-					<label class="font-medium text-sm" for="listing-bathrooms">Bathrooms</label>
+					<label class="font-medium text-sm" for="filter-listing-bathrooms">Bathrooms</label>
 					<Selector
+						{clearFilters}
+						on:change={(e) => (bathrooms = `${e.detail}`)}
 						className="border rounded border-dark/20 text-dark hover:border-primary"
 						inputName="filter-listing-bathrooms"
-						placeholder="Select bathrooms"
+						placeholder="Bathrooms"
 						options={bathTypes}
 					/>
 				</div>
@@ -231,25 +258,44 @@
 				<button type="submit" class="bg-primary px-4 w-full rounded py-1.5 font-medium"
 					>Search</button
 				>
-				<!-- <button class="bg-error px-4 rounded py-1">Cle</button> -->
 			</div>
 		</dialog>
-
-		<Selector inputName="listing-type" placeholder="Select bedrooms" options={apartmentTypes} />
-		<Selector inputName="listing-bathrooms" placeholder="Select bathrooms" options={bathTypes} />
+		<div>
+			<Selector
+				on:change={(e) => (bedrooms = `${e.detail}`)}
+				{clearFilters}
+				inputName="listing-type"
+				placeholder="Bedrooms"
+				options={apartmentTypes}
+			/>
+		</div>
+		<div>
+			<Selector
+				on:change={(e) => (bathrooms = `${e.detail}`)}
+				{clearFilters}
+				inputName="listing-bathrooms"
+				placeholder="Bathrooms"
+				options={bathTypes}
+			/>
+		</div>
 		<input
+			bind:value={location}
 			type="text"
+			name="location"
+			id="location"
 			placeholder="Preferred Location"
-			class="bg-inherit py-1.5 px-2 rounded transform focus:border focus:border-primary hover:border hover:border-primary outline-none"
+			class="bg-inherit py-1.5 px-2 text-white rounded transform focus:border focus:border-primary hover:border hover:border-primary outline-none"
 		/>
-		<div class="flex gap-2">
-			<button type="submit" class="bg-primary py-1.5 font-serif font-bold rounded px-5"
+		<div class="flex gap-2 sm:w-full md:w-auto sm:justify-end sm:mt-2 md:mt-0">
+			<button
+				type="submit"
+				class="bg-primary hover:bg-primary/90 py-1.5 font-serif font-bold rounded px-5"
 				>Search</button
 			>
 			<button
 				type="button"
 				on:click={() => advancedFilterModal.showModal()}
-				class="flex items-center text-white px-3 py-1 rounded"
+				class="flex items-center transition-all hover:bg-gray/20 text-white px-3 py-1 rounded"
 			>
 				<iconify-icon width="25" height="25" icon="mi:filter" />
 			</button>
@@ -311,9 +357,5 @@
 
 	.search-input-group input:focus::placeholder {
 		color: transparent;
-	}
-
-	.filter-btn.active {
-		color: var(--primary-color);
 	}
 </style>

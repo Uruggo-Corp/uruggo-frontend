@@ -38,18 +38,21 @@ export const actions: Actions = {
 
 	filter: async ({ request }) => {
 		const formData = await request.formData();
+		const location = formData.get('location');
 		const city = formData.get('city');
 		const state = formData.get('state');
 		const country = formData.get('country');
 		const minPrice = formData.getAll('price-range')[0];
 		const maxPrice = formData.getAll('price-range')[1];
-		const bedrooms = formData.get('listing-type');
-		const bathrooms = formData.get('listing-bathrooms');
-		const modalBedrooms = formData.get('filter-listing-type');
-		const modalBathrooms = formData.get('filter-listing-bathrooms');
+		const bedrooms = formData.get('bedrooms');
+		const bathrooms = formData.get('bathrooms');
 
 		const listingFilterSchema = z
 			.object({
+				location: z
+					.string({ required_error: 'Location is required' })
+					.min(3, 'Location must be at least 3 characters long')
+					.optional(),
 				city: z
 					.string({ required_error: 'City is required' })
 					.min(3, 'City must be at least 3 characters long')
@@ -74,14 +77,6 @@ export const actions: Actions = {
 				bathrooms: z
 					.number({ required_error: 'Bathrooms is required' })
 					.min(1, 'Bathrooms must be at least 1')
-					.optional(),
-				modalBedrooms: z
-					.number({ required_error: 'Bedrooms is required' })
-					.min(1, 'Bedrooms must be at least 1')
-					.optional(),
-				modalBathrooms: z
-					.number({ required_error: 'Bathrooms is required' })
-					.min(1, 'Bathrooms must be at least 1')
 					.optional()
 			})
 			.superRefine(({ minPrice, maxPrice }, ctx) => {
@@ -96,94 +91,85 @@ export const actions: Actions = {
 				}
 			});
 		const body = {
+			...(location && { location: String(location) }),
 			...(city && { city: String(city) }),
 			...(state && { state: String(state) }),
 			...(country && { country: String(country) }),
 			...(minPrice && { minPrice: Number(minPrice) }),
 			...(maxPrice && { maxPrice: Number(maxPrice) }),
 			...(bedrooms && { bedrooms: Number(bedrooms) }),
-			...(bathrooms && { bathrooms: Number(bathrooms) }),
-			...(modalBedrooms && { modalBedrooms: Number(modalBedrooms) }),
-			...(modalBathrooms && { modalBathrooms: Number(modalBathrooms) })
+			...(bathrooms && { bathrooms: Number(bathrooms) })
 		};
 
 		try {
-			// console.log(body);
-
 			const validatedData = listingFilterSchema.parse(body);
 			const filteredListings = await prisma.listing.findMany({
 				where: {
-					bathrooms: {
-						...(validatedData.bathrooms &&
-							validatedData.modalBathrooms && {
-								lte:
-									validatedData.bathrooms > validatedData.modalBathrooms
-										? validatedData.bathrooms
-										: validatedData.modalBathrooms,
-								gte:
-									validatedData.bathrooms > validatedData.modalBathrooms
-										? validatedData.bathrooms
-										: validatedData.modalBathrooms
-							}),
-						...(validatedData.bathrooms &&
-							!validatedData.modalBathrooms && {
-								equals: validatedData.bathrooms
-							}),
-						...(validatedData.modalBathrooms &&
-							!validatedData.bathrooms && {
-								equals: validatedData.modalBathrooms
-							})
-					},
-					bedrooms: {
-						...(validatedData.bedrooms &&
-							validatedData.modalBedrooms && {
-								lte:
-									validatedData.bedrooms > validatedData.modalBedrooms
-										? validatedData.bedrooms
-										: validatedData.modalBedrooms,
-								gte:
-									validatedData.bedrooms > validatedData.modalBedrooms
-										? validatedData.bedrooms
-										: validatedData.modalBedrooms
-							}),
-						...(validatedData.bedrooms &&
-							!validatedData.modalBedrooms && {
-								equals: validatedData.bedrooms
-							}),
-						...(validatedData.modalBedrooms &&
-							!validatedData.bedrooms && {
-								equals: validatedData.modalBedrooms
-							})
-					},
-					price: {
-						...(validatedData.maxPrice && {
-							lte: validatedData.maxPrice
+					...(validatedData.location && {
+						OR: [
+							{
+								city: {
+									search: validatedData.location
+								}
+							},
+							{
+								street_address: {
+									search: validatedData.location
+								}
+							},
+							{
+								state: {
+									search: validatedData.location
+								}
+							},
+							{
+								country: {
+									search: validatedData.location
+								}
+							}
+						]
+					}),
+					...(validatedData.bathrooms && {
+						bathrooms: {
+							equals: validatedData.bathrooms
+						}
+					}),
+					...(validatedData.bedrooms && {
+						bedrooms: {
+							equals: validatedData.bedrooms
+						}
+					}),
+					...(validatedData.maxPrice &&
+						validatedData.minPrice && {
+							price: {
+								lte: validatedData.maxPrice,
+								gte: validatedData.minPrice
+							}
 						}),
-						...(validatedData.minPrice && {
-							gte: validatedData.minPrice
-						})
-					},
-					country: {
-						...(validatedData.country && {
+
+					...(validatedData.country && {
+						country: {
 							equals: validatedData.country
-						})
-					},
-					state: {
-						...(validatedData.state && {
+						}
+					}),
+					...(validatedData.state && {
+						state: {
 							equals: validatedData.state
-						})
-					},
-					city: {
-						...(validatedData.city && {
+						}
+					}),
+					...(validatedData.city && {
+						city: {
 							equals: validatedData.city
-						})
-					}
+						}
+					})
+				},
+				include: {
+					agent: true,
+					images: true
 				}
 			});
 
-			if (filteredListings.length > 0) {
-				// console.log(filteredListings);
-
+			if (filteredListings && filteredListings.length > 0) {
 				return {
 					filtered: filteredListings
 				};
@@ -196,15 +182,13 @@ export const actions: Actions = {
 			}
 		} catch (e) {
 			if (e instanceof z.ZodError) {
-				// console.log(e.issues);
 				const errors = e.flatten().fieldErrors as FilterValidationError;
+				console.log(errors);
 
 				return fail(400, {
 					errors
 				});
 			}
-
-			// console.log(e);
 		}
 
 		return fail(500, {
