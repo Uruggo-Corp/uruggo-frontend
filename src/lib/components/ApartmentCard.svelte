@@ -4,6 +4,7 @@
 
 	export let inRecommended: boolean = false;
 	export let listing: ListingWithImages;
+	// console.log(listing);
 </script>
 
 <div class="overflow-hidden rounded-[5px] border border-dark flex flex-col">
@@ -16,7 +17,7 @@
 					<span> View </span>
 				</div>
 				<img
-					src={getDefaultImage(listing.images).url}
+					src={getDefaultImage(listing.images)?.url}
 					class="w-full group-hover:scale-105 transition-all duration-300"
 					alt="Apartment placeholder"
 					style="object-fit: cover; object-position: center; aspect-ratio: 520/347;"
