@@ -73,6 +73,7 @@
 			try {
 				if (result.status === 200) {
 					if (filteredListings) {
+						noListings;
 						listings = filteredListings;
 					}
 					showToastr('Filter successful.', 'success');
@@ -81,6 +82,8 @@
 						showToastr(error, 'error');
 					});
 				} else if (result.status === 404) {
+					listings = [];
+					noListings = true;
 					showToastr(result?.data.errors?.server[0], 'error');
 				} else if (result.status === 400) {
 					errors = result.data.errors;
@@ -102,9 +105,11 @@
 
 	const clear = () => {
 		clearFilters = true;
+		noListings = false;
 		listings = data.listings as ListingWithImages[];
 	};
 	let location: string;
+	let noListings: boolean = false;
 	$: if (clearFilters) {
 		location = '';
 	}
@@ -120,11 +125,12 @@
 	{/if}
 </svelte:head>
 
-{#if filteredListings}
+{#if noListings || filteredListings}
 	<button
 		on:click={clear}
-		class="fixed bottom-28 sm:bottom-5 bg-dark text-white right-3 py-3 px-6 rounded-full"
-		>Clear filters</button
+		class="fixed shadow bottom-28 sm:bottom-5 items-center flex gap-2 shadow-primary/20 bg-dark text-white right-3 py-3 px-6 rounded-full"
+	>
+		<span>Clear filters</span><iconify-icon width="20" icon="mdi:filter-off-outline" /></button
 	>
 {/if}
 <section class="filter container container-padding mx-auto my-[40px]">
@@ -304,11 +310,19 @@
 </section>
 
 <section class="my-[80px] container container-padding mx-auto">
-	<h3 class="text-center text-3xl font-serif text-dark font-bold">Available Apartments</h3>
+	<h3 class="text-center text-3xl font-serif text-dark font-bold">
+		{listings.length > 0 ? 'Available Apartments' : 'No listing found'}
+	</h3>
 	<div class="mt-[40px] grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-[20px] mx-auto">
-		{#each listings as listing}
-			<ApartmentCard {listing} />
-		{/each}
+		{#if listings.length > 0}
+			{#each listings as listing}
+				<ApartmentCard {listing} />
+			{/each}
+		{:else}
+			<div class="col-span-full text-dark h-[10em] flex w-full items-center justify-center">
+				<iconify-icon width="75" icon="pepicons-print:house-circle-off" />
+			</div>
+		{/if}
 	</div>
 </section>
 
